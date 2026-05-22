@@ -5,7 +5,9 @@
 :: ============================================================
 setlocal EnableDelayedExpansion
 chcp 65001 >nul
-title Itchy Toolbox
+title I T C H Y   T O O L B O X
+set "VERSION=0.3"
+set "TOOLBOX_FILE=%~f0"
 mode con cols=120 lines=45
 
 :: ANSI renk destegi (Win10+)
@@ -34,6 +36,7 @@ call :SPLASH
 :: ANA MENU
 :: ============================================================
 :MAIN_MENU
+mode con cols=120 lines=45
 cls
 call :BANNER
 echo.
@@ -50,14 +53,19 @@ if !errorlevel! == 0 (
 echo.
 
 echo   %CYN%[1]%RST% Uygulama Yukleyici
-echo   %CYN%[2]%RST% Standart Program Kurulumu
-echo   %CYN%[3]%RST% Hizmet Yonetimi
-echo   %CYN%[4]%RST% Ozellik Yonetimi
-echo   %CYN%[5]%RST% PC Zaman Ayarli Kapat
-echo   %CYN%[6]%RST% Ping Olcer / DNS Degistirici
-echo   %CYN%[7]%RST% Lisans Yonetimi
-echo   %CYN%[8]%RST% Sistem Hakkinda
-echo   %CYN%[9]%RST% Kayitli WiFi Bilgileri
+echo   %CYN%[2]%RST% Hizmet Yonetimi
+echo   %CYN%[3]%RST% Ozellik Yonetimi
+echo   %CYN%[4]%RST% PC Zaman Ayarli Kapat
+echo   %CYN%[5]%RST% Ping Olcer / DNS Degistirici
+echo   %CYN%[6]%RST% Lisans Yonetimi
+echo   %CYN%[7]%RST% Sistem Hakkinda
+echo   %CYN%[8]%RST% Kayitli WiFi Bilgileri
+echo   %CYN%[9]%RST% Kurulum Profilleri
+echo   %CYN%[10]%RST% Windows Onarim
+echo   %CYN%[11]%RST% Yedekleme / Geri Yukleme
+echo   %CYN%[12]%RST% Sistem Araclari
+echo   %CYN%[13]%RST% Ag Onarim / Rapor
+echo   %CYN%[14]%RST% Yonetici Olarak Yeniden Baslat
 echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo   %DIM%[sayi] sec   [q] cikis%RST%
@@ -68,14 +76,19 @@ set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 
 if /i "!choice!"=="q" goto :EXIT
 if "!choice!"=="1" goto :APP_INSTALLER
-if "!choice!"=="2" goto :STANDARD_INSTALLER
-if "!choice!"=="3" goto :NOT_IMPL_SVC
-if "!choice!"=="4" goto :NOT_IMPL_FEAT
-if "!choice!"=="5" goto :NOT_IMPL_SHUT
-if "!choice!"=="6" goto :NOT_IMPL_PING
-if "!choice!"=="7" goto :NOT_IMPL_LIC
-if "!choice!"=="8" goto :NOT_IMPL_SYS
-if "!choice!"=="9" goto :NOT_IMPL_WIFI
+if "!choice!"=="2" goto :SERVICE_MENU
+if "!choice!"=="3" goto :FEATURE_MENU
+if "!choice!"=="4" goto :SHUTDOWN_TIMER
+if "!choice!"=="5" goto :PING_DNS_MENU
+if "!choice!"=="6" goto :LICENSE_MENU
+if "!choice!"=="7" goto :SYSTEM_INFO
+if "!choice!"=="8" goto :WIFI_INFO
+if "!choice!"=="9" goto :STANDARD_INSTALLER
+if "!choice!"=="10" goto :WINDOWS_REPAIR
+if "!choice!"=="11" goto :BACKUP_RECOVERY_MENU
+if "!choice!"=="12" goto :SYSTEM_TOOLS_MENU
+if "!choice!"=="13" goto :NETWORK_REPORT_MENU
+if "!choice!"=="14" call :RELAUNCH_ADMIN
 goto :MAIN_MENU
 
 
@@ -83,6 +96,7 @@ goto :MAIN_MENU
 :: UYGULAMA YUKLEYICI
 :: ============================================================
 :APP_INSTALLER
+mode con cols=120 lines=64
 cls
 call :BANNER
 echo.
@@ -172,22 +186,187 @@ set "APP[45]=RARLab.WinRAR|WinRAR"
 set "APP[46]=CUSTOM_ALPEMIX|Alpemix"
 set "APP[47]=CUSTOM|Itchy YouTube Downloader"
 set "APP[48]=CUSTOM|Itchy Backup"
-set "APP_COUNT=48"
+set "APP[49]=REALiX.HWiNFO|HWiNFO"
+set "APP[50]=CPUID.HWMonitor|HWMonitor"
+set "APP[51]=CPUID.CPU-Z|CPU-Z"
+set "APP[52]=TechPowerUp.GPU-Z|GPU-Z"
+set "APP[53]=Geeks3D.FurMark|FurMark"
+set "APP[54]=NirSoft.BatteryInfoView|BatteryInfo"
+set "APP[55]=FastCopy.FastCopy|FastCopy"
+set "APP[56]=Piriform.Recuva|Recuva"
+set "APP[57]=DMDE.DMDE|DMDE"
+set "APP[58]=RevoUninstaller.RevoUninstaller|Revo"
+set "APP[59]=Wagnardsoft.DisplayDriverUninstaller|DDU"
+set "APP[60]=CUSTOM|Java Uninstaller"
+set "APP[61]=CrystalDewWorld.CrystalDiskInfo|CrystalDiskInfo"
+set "APP[62]=CrystalDewWorld.CrystalDiskMark|CrystalDiskMark"
+set "APP[63]=Rufus.Rufus|Rufus"
+set "APP[64]=Ventoy.Ventoy|Ventoy"
+set "APP[65]=AntibodySoftware.WizTree|WizTree"
+set "APP[66]=voidtools.Everything|Everything"
+set "APP[67]=RustDesk.RustDesk|RustDesk"
+set "APP[68]=Malwarebytes.Malwarebytes|Malwarebytes"
+set "APP[69]=Malwarebytes.AdwCleaner|AdwCleaner"
+set "APP[70]=Microsoft.Sysinternals.Suite|Sysinternals Suite"
+set "APP[71]=Microsoft.VCRedist.2015+.x64|VC++ 2015-2022 x64"
+set "APP[72]=Microsoft.VCRedist.2015+.x86|VC++ 2015-2022 x86"
+set "APP[73]=Microsoft.DotNet.DesktopRuntime.8|.NET Desktop Runtime 8"
+set "APP[74]=Microsoft.DirectX|DirectX Runtime"
+set "APP_COUNT=74"
 exit /b
 
 
 :PRINT_APP_CATEGORIES
-call :PRINT_CATEGORY "Mesajlasma" 1 4
-call :PRINT_CATEGORY "Oyun Kutuphanesi" 5 8
-call :PRINT_CATEGORY "Tarayici" 9 16
-call :PRINT_CATEGORY "Multimedya" 17 21
-call :PRINT_CATEGORY "Video-Ses Oynatici" 22 25
-call :PRINT_CATEGORY "Indirme Araclari" 26 27
-call :PRINT_CATEGORY "Belgeler" 28 30
-call :PRINT_CATEGORY "Gelistirme" 31 36
-call :PRINT_CATEGORY "Temizlik" 37 38
-call :PRINT_CATEGORY "Diger" 39 46
-call :PRINT_CATEGORY "Itchy Programlari" 47 48
+call :LOAD_APP_GRID
+echo   %GRY%┌───────────────────────────────────┬───────────────────────────────────┬───────────────────────────────────┐%RST%
+for /l %%r in (1,1,!APP_GRID_ROWS!) do (
+    call :MAKE_APP_GRID_CELL 1 %%r app_cell_1
+    call :MAKE_APP_GRID_CELL 2 %%r app_cell_2
+    call :MAKE_APP_GRID_CELL 3 %%r app_cell_3
+    echo   %GRY%│%RST%!app_cell_1!%GRY%│%RST%!app_cell_2!%GRY%│%RST%!app_cell_3!%GRY%│%RST%
+)
+echo   %GRY%└───────────────────────────────────┴───────────────────────────────────┴───────────────────────────────────┘%RST%
+exit /b
+
+
+:LOAD_APP_GRID
+set "APP_GRID_ROWS=34"
+for %%c in (1 2 3) do for /l %%r in (1,1,!APP_GRID_ROWS!) do set "APP_GRID[%%c,%%r]="
+set "APP_GRID[1,1]=CAT|Mesajlasma"
+set "APP_GRID[1,2]=APP|1"
+set "APP_GRID[1,3]=APP|2"
+set "APP_GRID[1,4]=APP|3"
+set "APP_GRID[1,5]=APP|4"
+set "APP_GRID[1,6]=CAT|Oyun Kutuphanesi"
+set "APP_GRID[1,7]=APP|5"
+set "APP_GRID[1,8]=APP|6"
+set "APP_GRID[1,9]=APP|7"
+set "APP_GRID[1,10]=APP|8"
+set "APP_GRID[1,11]=CAT|Tarayici"
+set "APP_GRID[1,12]=APP|9"
+set "APP_GRID[1,13]=APP|10"
+set "APP_GRID[1,14]=APP|11"
+set "APP_GRID[1,15]=APP|12"
+set "APP_GRID[1,16]=APP|13"
+set "APP_GRID[1,17]=APP|14"
+set "APP_GRID[1,18]=APP|15"
+set "APP_GRID[1,19]=APP|16"
+set "APP_GRID[1,20]=CAT|Donanim"
+set "APP_GRID[1,21]=APP|49"
+set "APP_GRID[1,22]=APP|50"
+set "APP_GRID[1,23]=APP|51"
+set "APP_GRID[1,24]=APP|52"
+set "APP_GRID[1,25]=APP|53"
+set "APP_GRID[1,26]=APP|54"
+set "APP_GRID[1,27]=CAT|Disk-Depolama"
+set "APP_GRID[1,28]=APP|61"
+set "APP_GRID[1,29]=APP|62"
+set "APP_GRID[1,30]=APP|65"
+set "APP_GRID[1,31]=APP|66"
+set "APP_GRID[1,32]=CAT|USB-ISO"
+set "APP_GRID[1,33]=APP|63"
+set "APP_GRID[1,34]=APP|64"
+set "APP_GRID[2,1]=CAT|Multimedya"
+set "APP_GRID[2,2]=APP|17"
+set "APP_GRID[2,3]=APP|18"
+set "APP_GRID[2,4]=APP|19"
+set "APP_GRID[2,5]=APP|20"
+set "APP_GRID[2,6]=APP|21"
+set "APP_GRID[2,7]=CAT|Video-Ses Oynatici"
+set "APP_GRID[2,8]=APP|22"
+set "APP_GRID[2,9]=APP|23"
+set "APP_GRID[2,10]=APP|24"
+set "APP_GRID[2,11]=APP|25"
+set "APP_GRID[2,12]=CAT|Indirme Araclari"
+set "APP_GRID[2,13]=APP|26"
+set "APP_GRID[2,14]=APP|27"
+set "APP_GRID[2,15]=CAT|Belgeler"
+set "APP_GRID[2,16]=APP|28"
+set "APP_GRID[2,17]=APP|29"
+set "APP_GRID[2,18]=APP|30"
+set "APP_GRID[2,19]=CAT|Backup-Recovery"
+set "APP_GRID[2,20]=APP|55"
+set "APP_GRID[2,21]=APP|56"
+set "APP_GRID[2,22]=APP|57"
+set "APP_GRID[2,23]=CAT|Uzak Destek"
+set "APP_GRID[2,24]=APP|40"
+set "APP_GRID[2,25]=APP|46"
+set "APP_GRID[2,26]=APP|67"
+set "APP_GRID[2,27]=CAT|Guvenlik Tarama"
+set "APP_GRID[2,28]=APP|68"
+set "APP_GRID[2,29]=APP|69"
+set "APP_GRID[3,1]=CAT|Gelistirme"
+set "APP_GRID[3,2]=APP|31"
+set "APP_GRID[3,3]=APP|32"
+set "APP_GRID[3,4]=APP|33"
+set "APP_GRID[3,5]=APP|34"
+set "APP_GRID[3,6]=APP|35"
+set "APP_GRID[3,7]=APP|36"
+set "APP_GRID[3,8]=CAT|Runtime"
+set "APP_GRID[3,9]=APP|71"
+set "APP_GRID[3,10]=APP|72"
+set "APP_GRID[3,11]=APP|73"
+set "APP_GRID[3,12]=APP|74"
+set "APP_GRID[3,13]=CAT|Temizlik"
+set "APP_GRID[3,14]=APP|37"
+set "APP_GRID[3,15]=APP|38"
+set "APP_GRID[3,16]=APP|70"
+set "APP_GRID[3,17]=CAT|Diger"
+set "APP_GRID[3,18]=APP|39"
+set "APP_GRID[3,19]=APP|41"
+set "APP_GRID[3,20]=APP|42"
+set "APP_GRID[3,21]=APP|43"
+set "APP_GRID[3,22]=APP|44"
+set "APP_GRID[3,23]=APP|45"
+set "APP_GRID[3,24]=CAT|Itchy Programlari"
+set "APP_GRID[3,25]=APP|47"
+set "APP_GRID[3,26]=APP|48"
+set "APP_GRID[3,27]=CAT|Uninstaller"
+set "APP_GRID[3,28]=APP|58"
+set "APP_GRID[3,29]=APP|59"
+set "APP_GRID[3,30]=APP|60"
+exit /b
+
+
+:MAKE_APP_GRID_CELL
+set "grid_entry=!APP_GRID[%~1,%~2]!"
+set "grid_blank=                                   "
+if not defined grid_entry (
+    set "%~3=!grid_blank:~0,35!"
+    exit /b
+)
+for /f "tokens=1,2 delims=|" %%a in ("!grid_entry!") do (
+    set "grid_type=%%a"
+    set "grid_value=%%b"
+)
+if "!grid_type!"=="CAT" (
+    set "grid_text= ▼ !grid_value!                                   "
+    set "grid_text=!grid_text:~0,35!"
+    set "%~3=%GRY%!grid_text!%RST%"
+    exit /b
+)
+set "grid_idx=!grid_value!"
+set "grid_pkg="
+set "grid_name="
+for /f "tokens=1,2 delims=|" %%a in ("!APP[%grid_idx%]!") do (
+    set "grid_pkg=%%a"
+    set "grid_name=%%b"
+)
+if !grid_idx! lss 10 (set "grid_num= !grid_idx!") else set "grid_num=!grid_idx!"
+set "grid_mark="
+if "!grid_pkg!"=="CUSTOM" set "grid_mark=*"
+if "!grid_pkg!"=="CUSTOM_ALPEMIX" set "grid_mark=*"
+if "!grid_pkg!"=="CUSTOM_MEMORYDIAG" set "grid_mark=*"
+set "grid_name_pad= !grid_name!!grid_mark!                                "
+set "grid_name_pad=!grid_name_pad:~0,32!"
+set "grid_color=%CYN%"
+if !grid_idx! geq 5 if !grid_idx! leq 8 set "grid_color=%YLW%"
+if !grid_idx! geq 17 if !grid_idx! leq 22 set "grid_color=%YLW%"
+if !grid_idx! geq 26 if !grid_idx! leq 27 set "grid_color=%YLW%"
+if !grid_idx! geq 32 if !grid_idx! leq 34 set "grid_color=%YLW%"
+if !grid_idx! geq 36 if !grid_idx! leq 38 set "grid_color=%YLW%"
+if !grid_idx! geq 45 set "grid_color=%YLW%"
+set "%~3=%GRN%!grid_num!-%grid_color%!grid_name_pad!%RST%"
 exit /b
 
 
@@ -200,10 +379,10 @@ set "col_count=3"
 set "first_row=1"
 for /l %%s in (!cat_start!,!col_count!,!cat_end!) do (
     if "!first_row!"=="1" (
-        set "line=  %MAG%!cat_label!%RST%"
+        set "line=  %YLW%!cat_label!%RST%"
         set "first_row=0"
     ) else (
-        set "line=  %MAG%                      %RST%"
+        set "line=  %YLW%                      %RST%"
     )
     for /l %%o in (0,1,2) do (
         set /a "idx=%%s+%%o"
@@ -241,31 +420,31 @@ exit /b
 
 
 :: ============================================================
-:: STANDART PROGRAM KURULUMU
+:: KURULUM PROFILLERI
 :: ============================================================
 :STANDARD_INSTALLER
 cls
 call :BANNER
 echo.
-echo   %GRY%Ana Menu -- Standart Program Kurulumu%RST%
-echo   %YLW%%BLD%-- Standart Program Kurulumu%RST%
+echo   %GRY%Ana Menu -- Kurulum Profilleri%RST%
+echo   %YLW%%BLD%-- Kurulum Profilleri%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo.
 
 call :LOAD_APPS
-echo   %MAG%Kurulacak programlar%RST%
+echo   %CYN%[1]%RST% Standart cihaz
+echo       Adobe Reader, Chrome, AnyDesk, PotPlayer, WinRAR, Alpemix
+echo   %CYN%[2]%RST% Teknik servis
+echo       Standart set, 7-Zip, CrystalDiskInfo, WizTree, Everything, Rufus, Revo, Sysinternals
+echo   %CYN%[3]%RST% Oyun ve medya
+echo       Steam, EA App, OBS, codec, VLC, PotPlayer, Spotify, HandBrake, DirectX, VC++ Runtime
+echo   %CYN%[4]%RST% Gelistirici
+echo       Notepad++, VS Code, Git, Node.js, .NET Runtime, VC++ Runtime, Sysinternals
+echo   %CYN%[5]%RST% Winget uygulama listesini disari aktar
+echo   %CYN%[6]%RST% Winget uygulama listesinden kur
 echo.
-call :MAKE_APP_CELL 28 cell1
-call :MAKE_APP_CELL 9 cell2
-call :MAKE_APP_CELL 40 cell3
-echo   !cell1!!cell2!!cell3!
-call :MAKE_APP_CELL 24 cell1
-call :MAKE_APP_CELL 45 cell2
-call :MAKE_APP_CELL 46 cell3
-echo   !cell1!!cell2!!cell3!
-echo.
-echo   %DIM%Bu secenek Adobe Reader, Chrome, AnyDesk, PotPlayer, WinRAR ve Alpemix kurar.%RST%
-echo   %DIM%[k] kuruluma basla   [x] geri   [q] cikis%RST%
+echo   %DIM%Profiller tek tikla sik kullanilan setleri kurar. Ayrintili secim icin Uygulama Yukleyici kullanilir.%RST%
+echo   %DIM%[x] geri   [q] cikis%RST%
 echo.
 
 set "choice="
@@ -273,26 +452,59 @@ set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 
 if /i "!choice!"=="q" goto :EXIT
 if /i "!choice!"=="x" goto :MAIN_MENU
-if /i "!choice!"=="k" (
-    call :INSTALL_STANDARD_SET
-    goto :STANDARD_INSTALLER
-)
+if "!choice!"=="1" call :INSTALL_PROFILE "Standart cihaz" "28 9 40 24 45 46"
+if "!choice!"=="2" call :INSTALL_PROFILE "Teknik servis" "28 9 40 24 45 46 39 61 65 66 63 58 70"
+if "!choice!"=="3" call :INSTALL_PROFILE "Oyun ve medya" "6 8 19 21 22 23 24 25 71 72 74"
+if "!choice!"=="4" call :INSTALL_PROFILE "Gelistirici" "31 32 34 35 71 72 73 70"
+if "!choice!"=="5" call :WINGET_EXPORT
+if "!choice!"=="6" call :WINGET_IMPORT
 goto :STANDARD_INSTALLER
 
 
-:INSTALL_STANDARD_SET
+:INSTALL_PROFILE
 echo.
-echo   %YLW%-- Standart programlar kuruluyor...%RST%
+echo   %YLW%-- %~1 profili kuruluyor...%RST%
 echo.
 set "ok_count=0"
 set "fail_count=0"
-for %%i in (28 9 40 24 45 46) do (
+for %%i in (%~2) do (
     call :INSTALL_ONE %%i
 )
 echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo   %GRN%[+] Basarili: !ok_count!%RST%   %RED%[-] Basarisiz: !fail_count!%RST%
 echo.
+pause
+exit /b
+
+
+:WINGET_EXPORT
+set "winget_list=%USERPROFILE%\Desktop\Itchy-Winget-Apps.json"
+echo.
+echo   %YLW%-- Winget uygulama listesi disari aktariliyor...%RST%
+winget export -o "!winget_list!" --accept-source-agreements
+if !errorlevel! == 0 (
+    echo   %GRN%[+] Kaydedildi: !winget_list!%RST%
+) else (
+    echo   %RED%[-] Liste disari aktarilamadi.%RST%
+)
+pause
+exit /b
+
+
+:WINGET_IMPORT
+echo.
+set "winget_list=%USERPROFILE%\Desktop\Itchy-Winget-Apps.json"
+set /p "winget_list=  Winget JSON yolu [!winget_list!]: "
+if "!winget_list!"=="" set "winget_list=%USERPROFILE%\Desktop\Itchy-Winget-Apps.json"
+if not exist "!winget_list!" (
+    echo   %RED%[-] Dosya bulunamadi: !winget_list!%RST%
+    pause
+    exit /b
+)
+echo.
+echo   %YLW%-- Winget listedeki uygulamalari kuruyor...%RST%
+winget import -i "!winget_list!" --accept-source-agreements --accept-package-agreements
 pause
 exit /b
 
@@ -348,6 +560,13 @@ if "!pkg!"=="CUSTOM_ALPEMIX" (
     exit /b
 )
 
+if "!pkg!"=="CUSTOM_MEMORYDIAG" (
+    start "" mdsched.exe
+    echo     %GRN%[+] Windows Bellek Tanilama acildi%RST%
+    set /a ok_count+=1
+    exit /b
+)
+
 if "!pkg!"=="CUSTOM" (
     echo     %YLW%[~] Ozel kurulum henuz tanimlanmamis, atlandi.%RST%
     set /a fail_count+=1
@@ -399,48 +618,798 @@ exit /b
 
 
 :: ============================================================
-:: PLACEHOLDER MODULLER
+:: HIZMET YONETIMI
 :: ============================================================
-:NOT_IMPL_SVC
-call :NOT_IMPL "Hizmet Yonetimi"
-goto :MAIN_MENU
-
-:NOT_IMPL_FEAT
-call :NOT_IMPL "Ozellik Yonetimi"
-goto :MAIN_MENU
-
-:NOT_IMPL_SHUT
-call :NOT_IMPL "PC Zaman Ayarli Kapat"
-goto :MAIN_MENU
-
-:NOT_IMPL_PING
-call :NOT_IMPL "Ping Olcer / DNS Degistirici"
-goto :MAIN_MENU
-
-:NOT_IMPL_LIC
-call :NOT_IMPL "Lisans Yonetimi"
-goto :MAIN_MENU
-
-:NOT_IMPL_SYS
-call :NOT_IMPL "Sistem Hakkinda"
-goto :MAIN_MENU
-
-:NOT_IMPL_WIFI
-call :NOT_IMPL "Kayitli WiFi Bilgileri"
-goto :MAIN_MENU
-
-:NOT_IMPL
+:SERVICE_MENU
 cls
 call :BANNER
 echo.
-echo   %YLW%%BLD%-- %~1%RST%
+echo   %GRY%Ana Menu -- Hizmet Yonetimi%RST%
+echo   %YLW%%BLD%-- Hizmet Yonetimi%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo.
-echo   %YLW%[~] Bu modul henuz gelistirme asamasinda.%RST%
-echo   %DIM%Bir sonraki guncellemede eklenecek.%RST%
+call :LOAD_SERVICES
+call :PRINT_SERVICE_GRID
 echo.
+echo   %DIM%[numara] sec   [x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+call :SERVICE_DETAIL "!choice!"
+goto :SERVICE_MENU
+
+
+:LOAD_SERVICES
+set "SVC_COUNT=48"
+set "SVC[1]=Bluetooth|BthAvctpSvc,bthserv|Bluetooth cihazlari"
+set "SVC[2]=Telefon|PhoneSvc|Telefon baglantisi"
+set "SVC[3]=Yazici|Spooler|Yazdirma kuyrugu"
+set "SVC[4]=Tarayici ve Kamera|stisvc,FrameServer|Tarayici, kamera ve OBS kaynaklari"
+set "SVC[5]=Kalem ve Dokunmatik|TabletInputService|Kalem, dokunmatik ve el yazisi"
+set "SVC[6]=Bitlocker|BDESVC|Surucu sifreleme"
+set "SVC[7]=Tarifeli Aglar|DusmSvc|Kota ve veri kullanimi"
+set "SVC[8]=IP Yardimcisi|iphlpsvc|IPv6, tunel ve gelismis ag"
+set "SVC[9]=Mobil Etkin Nokta|icssvc|Internet paylasimi"
+set "SVC[10]=Radyo ve Ucak Modu|RmSvc|Laptop radyo/ucak modu"
+set "SVC[11]=Windows Simdi Baglan|WcnSvc|WPS baglantilari"
+set "SVC[12]=Wifi|WlanSvc|Kablosuz ag"
+set "SVC[13]=Konum|lfsvc|Windows konum hizmeti"
+set "SVC[14]=Miracast|WdiServiceHost,WdiSystemHost|Kablosuz ekran ve tani hizmetleri"
+set "SVC[15]=Akis|FDResPub,SSDPSRV,upnphost|Ag uzeri kesif ve paylasim"
+set "SVC[16]=Hizli Getir-Baslat|SysMain|Superfetch/SysMain"
+set "SVC[17]=Windows Search|WSearch|Indeksleme"
+set "SVC[18]=Hizli Kullanici Degistir|seclogon|Ikincil oturum acma"
+set "SVC[19]=Yazi Tipi Onbellegi|FontCache|Font onbellegi"
+set "SVC[20]=Windows Insider|wisvc|Insider program hizmeti"
+set "SVC[21]=Biyometrik|WbioSrvc|Parmak izi ve Windows Hello"
+set "SVC[22]=Disk Birlestirme|defragsvc|Optimize suruculer/TRIM"
+set "SVC[23]=Yonlendirici|Router|Yonlendirme ve uzak erisim"
+set "SVC[24]=Akilli Kart|SCardSvr,ScDeviceEnum,SCPolicySvc|Cipli kart okuyucu"
+set "SVC[25]=Kurumsal|AppIDSvc,AssignedAccessManagerSvc|Kiosk/AppLocker/Intune"
+set "SVC[26]=Simdi Yurutuluyor|NPSMSvc|Medya oturum yoneticisi"
+set "SVC[27]=Performans Gunlukleri|pla|Performans gunlukleri"
+set "SVC[28]=Oyun DVR ve Yayin|BcastDVRUserService|Xbox ekran kaydi"
+set "SVC[29]=Sistem Geri Yukleme|swprv,VSS|Golge kopya ve geri yukleme"
+set "SVC[30]=Karma Gerceklik|SharedRealitySvc|VR/karma gerceklik"
+set "SVC[31]=Xbox|XblAuthManager,XblGameSave,XboxGipSvc,XboxNetApiSvc|Xbox hizmetleri"
+set "SVC[32]=Teslim En Iyilestirme|DoSvc|Windows Update/Store dagitim"
+set "SVC[33]=Uzak Masaustu|TermService,SessionEnv,UmRdpService|RDP baglantisi"
+set "SVC[34]=Ekran Yakalama|CaptureService|Ekran yakalama"
+set "SVC[35]=Ebeveyn Denetimleri|WpcMonSvc|Aile denetimleri"
+set "SVC[36]=Sesli Komut|TokenBroker,OneSyncSvc|Cortana/sesli uygulamalar"
+set "SVC[37]=RetailDemo|RetailDemo|Magaza teshir modu"
+set "SVC[38]=Kisiler|PimIndexMaintenanceSvc,OneSyncSvc|Kisiler esitleme"
+set "SVC[39]=Telemetri|DiagTrack,dmwappushservice|Kullanici verisi/tani"
+set "SVC[40]=Sorun Giderme|diagnosticshub.standardcollector.service,DPS,WdiServiceHost,WdiSystemHost|Tani ve sorun giderme"
+set "SVC[41]=Sensorler|SensorService,SensrSvc,SensorDataService|Laptop sensorleri"
+set "SVC[42]=Otomatik Saat Dilimi|tzautoupdate|Saat dilimi guncelleme"
+set "SVC[43]=Mobil Veri|WwanSvc|3G/4G/5G SIM"
+set "SVC[44]=Ana Bilgisayari Esitle|OneSyncSvc|Takvim/kisi esitleme"
+set "SVC[45]=Temalar|Themes|Windows temalari"
+set "SVC[46]=Indirilen Haritalar|MapsBroker|Cevrimdisi haritalar"
+set "SVC[47]=Cuzdan|WalletService|Windows cuzdan"
+set "SVC[48]=Otomatik Oynat|ShellHWDetection|Otomatik oynat"
+exit /b
+
+
+:PRINT_SERVICE_GRID
+for /l %%r in (1,1,24) do (
+    call :MAKE_SERVICE_CELL %%r cell1
+    set /a "right=%%r+24"
+    call :MAKE_SERVICE_CELL !right! cell2
+    echo   !cell1!!cell2!
+)
+exit /b
+
+
+:MAKE_SERVICE_CELL
+set "idx=%~1"
+for /f "tokens=1 delims=|" %%a in ("!SVC[%idx%]!") do set "svc_name=%%a"
+if %~1 lss 10 (set "num=0%~1") else set "num=%~1"
+set "cell=[!num!] !svc_name!                              "
+set "cell=!cell:~0,44!"
+set "%~2=!cell!"
+exit /b
+
+
+:SERVICE_DETAIL
+set "svc_idx=%~1"
+for /f "delims=0123456789" %%a in ("!svc_idx!") do exit /b
+if "!svc_idx!"=="" exit /b
+if !svc_idx! lss 1 exit /b
+if !svc_idx! gtr !SVC_COUNT! exit /b
+for /f "tokens=1,2,3 delims=|" %%a in ("!SVC[%svc_idx%]!") do (
+    set "svc_name=%%a"
+    set "svc_ids=%%b"
+    set "svc_desc=%%c"
+)
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- [!svc_idx!] !svc_name!%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo   !svc_desc!
+echo   Servisler: !svc_ids!
+echo.
+echo   %DIM%[s] durum   [k] kapat/devre disi birak   [a] ac/otomatik yap   [x] geri%RST%
+echo.
+set "svc_action="
+set /p "svc_action=  %GRN%Secim: %RST%" || exit /b
+if /i "!svc_action!"=="s" call :SERVICE_STATUS "!svc_ids!"
+if /i "!svc_action!"=="k" call :SERVICE_APPLY "!svc_ids!" disable
+if /i "!svc_action!"=="a" call :SERVICE_APPLY "!svc_ids!" enable
 pause
 exit /b
+
+
+:SERVICE_STATUS
+set "ids=%~1"
+set "ids=!ids:,= !"
+for %%s in (!ids!) do (
+    echo.
+    echo   %CYN%-- %%s%RST%
+    sc query "%%s" | findstr /i "SERVICE_NAME STATE"
+)
+exit /b
+
+
+:SERVICE_APPLY
+set "ids=%~1"
+set "action=%~2"
+set "ids=!ids:,= !"
+if "!action!"=="disable" (
+    echo   %YLW%Servisler durdurulup devre disi birakiliyor...%RST%
+    for %%s in (!ids!) do (
+        sc stop "%%s" >nul 2>&1
+        sc config "%%s" start= disabled >nul 2>&1
+        if !errorlevel! == 0 (echo   [+] %%s) else echo   [-] %%s
+    )
+) else (
+    echo   %YLW%Servisler otomatik yapilip baslatiliyor...%RST%
+    for %%s in (!ids!) do (
+        sc config "%%s" start= auto >nul 2>&1
+        sc start "%%s" >nul 2>&1
+        if !errorlevel! == 0 (echo   [+] %%s) else echo   [-] %%s
+    )
+)
+exit /b
+
+
+:: ============================================================
+:: OZELLIK YONETIMI
+:: ============================================================
+:FEATURE_MENU
+cls
+call :BANNER
+echo.
+echo   %GRY%Ana Menu -- Ozellik Yonetimi%RST%
+echo   %YLW%%BLD%-- Ozellik Yonetimi%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+call :LOAD_FEATURES
+call :PRINT_FEATURE_GRID
+echo.
+echo   %DIM%[numara] sec   [x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+call :FEATURE_DETAIL "!choice!"
+goto :FEATURE_MENU
+
+
+:LOAD_FEATURES
+set "FEAT_COUNT=45"
+set "FEAT[1]=Fax|feature|FaxServicesClientPackage|Windows Fax"
+set "FEAT[2]=Wordpad|cap|Microsoft.Windows.WordPad~~~~0.0.1.0|WordPad"
+set "FEAT[3]=Not Defteri|cap|Microsoft.Windows.Notepad~~~~0.0.1.0|Not Defteri"
+set "FEAT[4]=Adim Kaydedici|none||psr.exe araci"
+set "FEAT[5]=Powershell ISE|feature|MicrosoftWindowsPowerShellISE|PowerShell kod editoru"
+set "FEAT[6]=Matematik Ifade Taniyici|feature|MathRecognizer|TabletPC matematik taniyici"
+set "FEAT[7]=Linux Altyapi|feature|Microsoft-Windows-Subsystem-Linux|WSL"
+set "FEAT[8]=Hizli Destek|cap|App.Support.QuickAssist~~~~0.0.1.0|Quick Assist"
+set "FEAT[9]=Hello Face|cap|Hello.Face.18967~~~~0.0.1.0|Yuz tanima"
+set "FEAT[10]=OpenSSH|cap|OpenSSH.Client~~~~0.0.1.0|OpenSSH istemci"
+set "FEAT[11]=ProjFS|feature|Client-ProjFS|Ongorulen dosya sistemi"
+set "FEAT[12]=Sistem Geri Yukleme|svc|swprv,VSS|Golge kopya servisleri"
+set "FEAT[13]=Calisma Klasorleri|feature|WorkFolders-Client|Work folders"
+set "FEAT[14]=Windows Hata Raporlama|svc|WerSvc|Hata raporlama"
+set "FEAT[15]=TFTP|feature|TFTP|TFTP istemci"
+set "FEAT[16]=Telnet|feature|TelnetClient|Telnet istemci"
+set "FEAT[17]=TCP/IP|none||Temel ag bileseni"
+set "FEAT[18]=TIFF IFilter|feature|TIFFIFilter|TIFF arama filtresi"
+set "FEAT[19]=WinSat|none||Sistem degerlendirme araci"
+set "FEAT[20]=RetailDemo|feature|Client-EmbeddedShellLauncher|Retail demo bagimli"
+set "FEAT[21]=Karma Gerceklik|cap|Analog.Holographic.Desktop~~~~0.0.1.0|Mixed Reality"
+set "FEAT[22]=CEIP Telemetri|svc|DiagTrack,dmwappushservice|Musteri deneyimi"
+set "FEAT[23]=Cihaz Kilitleme|feature|Client-DeviceLockdown|Device lockdown"
+set "FEAT[24]=Cok Noktali Baglayici|feature|MultiPoint-Connector|Ortak PC"
+set "FEAT[25]=BranchCache|feature|Client-DeviceLockdown|Ortak ag onbellek"
+set "FEAT[26]=PDF Olarak Yazdir|feature|Printing-PrintToPDFServices-Features|PDF yazici"
+set "FEAT[27]=XPS Belge Yazici|feature|Printing-XPSServices-Features|XPS yazici"
+set "FEAT[28]=Ag Dosya Sistemi|feature|ServicesForNFS-ClientOnly|NFS istemci"
+set "FEAT[29]=Fotograf Goruntuleyici|none||Eski goruntu acici"
+set "FEAT[30]=Uzaktan Yardim|none||msra.exe araci"
+set "FEAT[31]=SMB1|feature|SMB1Protocol|Eski SMB paylasim"
+set "FEAT[32]=SMB Direct|feature|SMBDirect|SMB Direct"
+set "FEAT[33]=Uzak Masaustu|svc|TermService,SessionEnv,UmRdpService|RDP"
+set "FEAT[34]=MSMQ|feature|MSMQ-Container|Microsoft Message Queue"
+set "FEAT[35]=3D Ekran Koruyucu|none||Ekran koruyucu dosyalari"
+set "FEAT[36]=MobilPC|feature|MobilityCenter|Windows Mobility Center"
+set "FEAT[37]=Kamera Deneyimi|svc|FrameServer|Kamera"
+set "FEAT[38]=Metin Tahmini|none||Klavye ayari"
+set "FEAT[39]=Ag Baglanti Yardimcisi|svc|NcaSvc|Network Connectivity Assistant"
+set "FEAT[40]=Identity Foundation|feature|Windows-Identity-Foundation|WIF"
+set "FEAT[41]=Yerel Grup Ilkesi|none||gpedit.msc Home surumde yok"
+set "FEAT[42]=Flipgrid|none||Teams egitim bileseni"
+set "FEAT[43]=Veri Merkezi Kopru|feature|DataCenterBridging|Kurumsal ag"
+set "FEAT[44]=Active Directory LDS|feature|DirectoryServices-ADAM-Client|AD LDS"
+set "FEAT[45]=Windows Tani Altyapisi|svc|DPS,WdiServiceHost,WdiSystemHost|Sorun giderme"
+exit /b
+
+
+:PRINT_FEATURE_GRID
+for /l %%r in (1,1,23) do (
+    call :MAKE_FEATURE_CELL %%r cell1
+    set /a "right=%%r+23"
+    if !right! leq !FEAT_COUNT! (call :MAKE_FEATURE_CELL !right! cell2) else set "cell2="
+    echo   !cell1!!cell2!
+)
+exit /b
+
+
+:MAKE_FEATURE_CELL
+set "idx=%~1"
+for /f "tokens=1 delims=|" %%a in ("!FEAT[%idx%]!") do set "feat_name=%%a"
+if %~1 lss 10 (set "num=0%~1") else set "num=%~1"
+set "cell=[!num!] !feat_name!                              "
+set "cell=!cell:~0,44!"
+set "%~2=!cell!"
+exit /b
+
+
+:FEATURE_DETAIL
+set "feat_idx=%~1"
+for /f "delims=0123456789" %%a in ("!feat_idx!") do exit /b
+if "!feat_idx!"=="" exit /b
+if !feat_idx! lss 1 exit /b
+if !feat_idx! gtr !FEAT_COUNT! exit /b
+for /f "tokens=1,2,3,4 delims=|" %%a in ("!FEAT[%feat_idx%]!") do (
+    set "feat_name=%%a"
+    set "feat_type=%%b"
+    set "feat_id=%%c"
+    set "feat_desc=%%d"
+)
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- [!feat_idx!] !feat_name!%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo   !feat_desc!
+echo.
+if "!feat_type!"=="none" (
+    echo   %YLW%Bu madde icin otomatik ac/kapat komutu eklenmedi.%RST%
+    pause
+    exit /b
+)
+echo   %DIM%[s] durum   [k] kapat/kaldir   [a] ac/kur   [x] geri%RST%
+echo.
+set "feat_action="
+set /p "feat_action=  %GRN%Secim: %RST%" || exit /b
+if /i "!feat_action!"=="s" call :FEATURE_APPLY status
+if /i "!feat_action!"=="k" call :FEATURE_APPLY disable
+if /i "!feat_action!"=="a" call :FEATURE_APPLY enable
+pause
+exit /b
+
+
+:FEATURE_APPLY
+set "feature_action=%~1"
+if "!feat_type!"=="svc" (
+    if "!feature_action!"=="status" call :SERVICE_STATUS "!feat_id!"
+    if "!feature_action!"=="disable" call :SERVICE_APPLY "!feat_id!" disable
+    if "!feature_action!"=="enable" call :SERVICE_APPLY "!feat_id!" enable
+    exit /b
+)
+if "!feat_type!"=="feature" (
+    if "!feature_action!"=="status" powershell -NoProfile -Command "Get-WindowsOptionalFeature -Online -FeatureName '!feat_id!' | Select-Object FeatureName,State"
+    if "!feature_action!"=="disable" powershell -NoProfile -Command "Disable-WindowsOptionalFeature -Online -FeatureName '!feat_id!' -NoRestart"
+    if "!feature_action!"=="enable" powershell -NoProfile -Command "Enable-WindowsOptionalFeature -Online -FeatureName '!feat_id!' -All -NoRestart"
+    exit /b
+)
+if "!feat_type!"=="cap" (
+    if "!feature_action!"=="status" powershell -NoProfile -Command "Get-WindowsCapability -Online -Name '!feat_id!' | Select-Object Name,State"
+    if "!feature_action!"=="disable" powershell -NoProfile -Command "Remove-WindowsCapability -Online -Name '!feat_id!'"
+    if "!feature_action!"=="enable" powershell -NoProfile -Command "Add-WindowsCapability -Online -Name '!feat_id!'"
+    exit /b
+)
+exit /b
+
+
+:: ============================================================
+:: PC ZAMAN AYARLI KAPAT
+:: ============================================================
+:SHUTDOWN_TIMER
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- PC Zaman Ayarli Kapat%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   Dakika girersen PC o sure sonra kapanir.
+echo   %DIM%[i] mevcut kapatma talimatini iptal et   [x] geri   [q] cikis%RST%
+echo.
+set "mins="
+set /p "mins=  %GRN%Dakika/Secim: %RST%" || goto :EXIT
+if /i "!mins!"=="q" goto :EXIT
+if /i "!mins!"=="x" goto :MAIN_MENU
+if /i "!mins!"=="i" (
+    shutdown /a
+    pause
+    goto :SHUTDOWN_TIMER
+)
+for /f "delims=0123456789" %%a in ("!mins!") do goto :SHUTDOWN_TIMER
+set /a "secs=!mins!*60"
+shutdown /s /t !secs!
+echo.
+echo   %GRN%[+] Kapatma talimati verildi: !mins! dakika sonra.%RST%
+pause
+goto :MAIN_MENU
+
+
+:: ============================================================
+:: PING OLCER / DNS DEGISTIRICI
+:: ============================================================
+:PING_DNS_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Ping Olcer / DNS Degistirici%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+call :PING_DNS_SUMMARY
+echo.
+echo   %CYN%[p]%RST% URL/alan adi ping olc
+echo   %CYN%[d]%RST% URL/alan adi DNS olc
+echo   %CYN%[1]%RST% DNS sunucularini test et
+echo   %CYN%[2]%RST% DNS degistir
+echo   %CYN%[3]%RST% DNS otomatik yap
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="p" call :CUSTOM_PING
+if /i "!choice!"=="d" call :CUSTOM_DNS
+if "!choice!"=="1" call :DNS_TESTS
+if "!choice!"=="2" call :DNS_SET_MENU
+if "!choice!"=="3" call :DNS_AUTO
+goto :PING_DNS_MENU
+
+
+:PING_DNS_SUMMARY
+echo   %GRY%Site                         Ping ms      DNS ms      Durum%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+powershell -NoProfile -Command "$sites='google.com','facebook.com','youtube.com','instagram.com','kick.com','reddit.com'; foreach($site in $sites){ $ping='--'; $dns='--'; $state='OK'; try { $p=New-Object Net.NetworkInformation.Ping; $r=$p.Send($site,1200); if($r.Status -eq 'Success'){$ping=[string]$r.RoundtripTime}else{$state=[string]$r.Status} } catch { $state='Ping hata' }; try { $sw=[Diagnostics.Stopwatch]::StartNew(); $null=[Net.Dns]::GetHostAddresses($site); $sw.Stop(); $dns=[string][math]::Round($sw.Elapsed.TotalMilliseconds,1) } catch { if($state -eq 'OK'){$state='DNS hata'} }; '{0,-28} {1,7}      {2,7}      {3}' -f $site,$ping,$dns,$state }"
+exit /b
+
+
+:DNS_TESTS
+for %%d in (1.1.1.1 94.140.14.14 9.9.9.9 76.76.2.0 8.8.8.8) do (
+    echo.
+    echo   %CYN%-- DNS %%d%RST%
+    powershell -NoProfile -Command "$m=Measure-Command { $null=Resolve-DnsName google.com -Server %%d -ErrorAction SilentlyContinue }; 'Ms: '+[math]::Round($m.TotalMilliseconds,1)"
+)
+pause
+exit /b
+
+
+:CUSTOM_PING
+echo.
+set "target="
+set /p "target=  Ping URL/alan adi: "
+call :NORMALIZE_HOST "!target!"
+if "!host!"=="" exit /b
+echo.
+echo   %CYN%-- !host!%RST%
+ping -n 4 "!host!"
+pause
+exit /b
+
+
+:CUSTOM_DNS
+echo.
+set "target="
+set /p "target=  DNS URL/alan adi: "
+call :NORMALIZE_HOST "!target!"
+if "!host!"=="" exit /b
+echo.
+echo   %CYN%-- !host!%RST%
+powershell -NoProfile -Command "$sw=[Diagnostics.Stopwatch]::StartNew(); try { Resolve-DnsName '!host!' -ErrorAction Stop; $sw.Stop(); 'DNS sure: '+[math]::Round($sw.Elapsed.TotalMilliseconds,1)+' ms' } catch { 'DNS sorgusu basarisiz: '+$_.Exception.Message }"
+pause
+exit /b
+
+
+:NORMALIZE_HOST
+set "host=%~1"
+set "host=!host:https://=!"
+set "host=!host:http://=!"
+for /f "tokens=1 delims=/" %%h in ("!host!") do set "host=%%h"
+exit /b
+
+
+:DNS_SET_MENU
+echo.
+echo   %CYN%[1]%RST% Cloudflare 1.1.1.1 / 1.0.0.1
+echo   %CYN%[2]%RST% AdGuard 94.140.14.14 / 94.140.15.15
+echo   %CYN%[3]%RST% Quad9 9.9.9.9 / 149.112.112.112
+echo   %CYN%[4]%RST% ControlD 76.76.2.0 / 76.76.10.0
+echo   %CYN%[5]%RST% Google 8.8.8.8 / 8.8.4.4
+echo.
+set "dns_choice="
+set /p "dns_choice=  %GRN%DNS: %RST%" || exit /b
+if "!dns_choice!"=="1" powershell -NoProfile -Command "foreach($a in Get-NetAdapter){ if($a.Status -eq 'Up'){ Set-DnsClientServerAddress -InterfaceIndex $a.InterfaceIndex -ServerAddresses 1.1.1.1,1.0.0.1 } }"
+if "!dns_choice!"=="2" powershell -NoProfile -Command "foreach($a in Get-NetAdapter){ if($a.Status -eq 'Up'){ Set-DnsClientServerAddress -InterfaceIndex $a.InterfaceIndex -ServerAddresses 94.140.14.14,94.140.15.15 } }"
+if "!dns_choice!"=="3" powershell -NoProfile -Command "foreach($a in Get-NetAdapter){ if($a.Status -eq 'Up'){ Set-DnsClientServerAddress -InterfaceIndex $a.InterfaceIndex -ServerAddresses 9.9.9.9,149.112.112.112 } }"
+if "!dns_choice!"=="4" powershell -NoProfile -Command "foreach($a in Get-NetAdapter){ if($a.Status -eq 'Up'){ Set-DnsClientServerAddress -InterfaceIndex $a.InterfaceIndex -ServerAddresses 76.76.2.0,76.76.10.0 } }"
+if "!dns_choice!"=="5" powershell -NoProfile -Command "foreach($a in Get-NetAdapter){ if($a.Status -eq 'Up'){ Set-DnsClientServerAddress -InterfaceIndex $a.InterfaceIndex -ServerAddresses 8.8.8.8,8.8.4.4 } }"
+echo.
+echo   %GRN%[+] DNS komutu calistirildi.%RST%
+pause
+exit /b
+
+
+:DNS_AUTO
+powershell -NoProfile -Command "foreach($a in Get-NetAdapter){ if($a.Status -eq 'Up'){ Set-DnsClientServerAddress -InterfaceIndex $a.InterfaceIndex -ResetServerAddresses } }"
+echo.
+echo   %GRN%[+] DNS otomatik moda alindi.%RST%
+pause
+exit /b
+
+
+:: ============================================================
+:: WINDOWS ONARIM
+:: ============================================================
+:WINDOWS_REPAIR
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Windows Onarim%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% CHKDSK online disk tarama
+echo   %CYN%[2]%RST% DISM / SFC sistem dosyasi onarimi
+echo   %CYN%[3]%RST% Disk Cleanup
+echo   %CYN%[4]%RST% Event Viewer
+echo   %CYN%[5]%RST% Task Manager
+echo   %CYN%[6]%RST% MemoryDiag
+echo   %CYN%[7]%RST% Geri yukleme noktasi olustur
+echo   %CYN%[8]%RST% Windows Update bilesenlerini sifirla
+echo   %CYN%[9]%RST% Ag onarim komutlari
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" call :REPAIR_CHKDSK
+if "!choice!"=="2" call :REPAIR_DISM_SFC
+if "!choice!"=="3" start "" cleanmgr.exe
+if "!choice!"=="4" start "" eventvwr.msc
+if "!choice!"=="5" start "" taskmgr.exe
+if "!choice!"=="6" start "" mdsched.exe
+if "!choice!"=="7" call :CREATE_RESTORE_POINT
+if "!choice!"=="8" call :RESET_WINDOWS_UPDATE
+if "!choice!"=="9" call :NETWORK_REPAIR
+goto :WINDOWS_REPAIR
+
+
+:REPAIR_CHKDSK
+echo.
+set "repair_drive=C:"
+set /p "repair_drive=  Taranacak surucu [C:]: "
+if "!repair_drive!"=="" set "repair_drive=C:"
+echo.
+echo   %YLW%-- chkdsk !repair_drive! /scan%RST%
+chkdsk !repair_drive! /scan
+pause
+exit /b
+
+
+:REPAIR_DISM_SFC
+echo.
+echo   %YLW%-- DISM RestoreHealth basladi...%RST%
+DISM.exe /Online /Cleanup-Image /RestoreHealth
+echo.
+echo   %YLW%-- SFC Scannow basladi...%RST%
+sfc /scannow
+pause
+exit /b
+
+
+:CREATE_RESTORE_POINT
+echo.
+echo   %YLW%-- Sistem geri yukleme noktasi olusturuluyor...%RST%
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { Enable-ComputerRestore -Drive ($env:SystemDrive+'\') -ErrorAction SilentlyContinue; Checkpoint-Computer -Description 'Itchy Toolbox' -RestorePointType 'MODIFY_SETTINGS' -ErrorAction Stop; '[+] Geri yukleme noktasi olusturuldu.' } catch { '[-] Olusturulamadi: '+$_.Exception.Message; exit 1 }"
+pause
+exit /b
+
+
+:RESET_WINDOWS_UPDATE
+echo.
+echo   %YLW%-- Windows Update onbellegi sifirlaniyor...%RST%
+echo   %DIM%BITS, Windows Update ve CryptSvc gecici olarak durdurulur.%RST%
+net stop bits
+net stop wuauserv
+net stop cryptsvc
+set "wu_cache=SoftwareDistribution.Itchy.!RANDOM!.old"
+set "wu_catroot=catroot2.Itchy.!RANDOM!.old"
+if exist "%windir%\SoftwareDistribution" ren "%windir%\SoftwareDistribution" "!wu_cache!"
+if exist "%windir%\System32\catroot2" ren "%windir%\System32\catroot2" "!wu_catroot!"
+net start cryptsvc
+net start wuauserv
+net start bits
+echo.
+echo   %GRN%[+] Windows Update sifirlama komutlari tamamlandi.%RST%
+pause
+exit /b
+
+
+:NETWORK_REPAIR
+echo.
+echo   %YLW%-- Ag onarim komutlari calisiyor...%RST%
+ipconfig /flushdns
+netsh winsock reset
+netsh int ip reset
+echo.
+echo   %YLW%[~] Winsock/IP sifirlama sonrasi yeniden baslatma gerekebilir.%RST%
+pause
+exit /b
+
+
+:: ============================================================
+:: YEDEKLEME / GERI YUKLEME
+:: ============================================================
+:BACKUP_RECOVERY_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Yedekleme / Geri Yukleme%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Geri yukleme noktasi olustur
+echo   %CYN%[2]%RST% Sistem Geri Yukleme'yi ac
+echo   %CYN%[3]%RST% Dosya Gecmisi'ni ac
+echo   %CYN%[4]%RST% Windows Yedekleme ayarlarini ac
+echo   %CYN%[5]%RST% Winget uygulama listesini disari aktar
+echo   %CYN%[6]%RST% Winget uygulama listesinden kur
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" call :CREATE_RESTORE_POINT
+if "!choice!"=="2" start "" rstrui.exe
+if "!choice!"=="3" start "" control.exe /name Microsoft.FileHistory
+if "!choice!"=="4" start "" ms-settings:backup
+if "!choice!"=="5" call :WINGET_EXPORT
+if "!choice!"=="6" call :WINGET_IMPORT
+goto :BACKUP_RECOVERY_MENU
+
+
+:: ============================================================
+:: SISTEM ARACLARI
+:: ============================================================
+:SYSTEM_TOOLS_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Sistem Araclari%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Aygit Yoneticisi
+echo   %CYN%[2]%RST% Disk Yonetimi
+echo   %CYN%[3]%RST% Hizmetler
+echo   %CYN%[4]%RST% Gorev Zamanlayici
+echo   %CYN%[5]%RST% Baslangic klasoru
+echo   %CYN%[6]%RST% Windows Update ayarlari
+echo   %CYN%[7]%RST% Ortam degiskenleri
+echo   %CYN%[8]%RST% Sysinternals Suite kur
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" start "" devmgmt.msc
+if "!choice!"=="2" start "" diskmgmt.msc
+if "!choice!"=="3" start "" services.msc
+if "!choice!"=="4" start "" taskschd.msc
+if "!choice!"=="5" start "" explorer.exe shell:startup
+if "!choice!"=="6" start "" ms-settings:windowsupdate
+if "!choice!"=="7" start "" SystemPropertiesAdvanced.exe
+if "!choice!"=="8" (
+    call :LOAD_APPS
+    set "ok_count=0"
+    set "fail_count=0"
+    call :INSTALL_ONE 70
+    pause
+)
+goto :SYSTEM_TOOLS_MENU
+
+
+:: ============================================================
+:: AG ONARIM / RAPOR
+:: ============================================================
+:NETWORK_REPORT_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Ag Onarim / Rapor%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Ag onarim komutlari
+echo   %CYN%[2]%RST% IP ve bagdastirici bilgisini goster
+echo   %CYN%[3]%RST% Hizli sistem raporu olustur
+echo   %CYN%[4]%RST% Ag raporu olustur
+echo   %CYN%[5]%RST% Yonetici Olarak Yeniden Baslat
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" call :NETWORK_REPAIR
+if "!choice!"=="2" (
+    ipconfig /all
+    pause
+)
+if "!choice!"=="3" call :CREATE_SYSTEM_REPORT
+if "!choice!"=="4" call :CREATE_NETWORK_REPORT
+if "!choice!"=="5" call :RELAUNCH_ADMIN
+goto :NETWORK_REPORT_MENU
+
+
+:CREATE_SYSTEM_REPORT
+set "report_file=%USERPROFILE%\Desktop\Itchy-System-Report.txt"
+echo.
+echo   %YLW%-- Hizli sistem raporu olusturuluyor...%RST%
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$out='!report_file!'; $os=Get-CimInstance Win32_OperatingSystem; $cs=Get-CimInstance Win32_ComputerSystem; $cpu=Get-CimInstance Win32_Processor; $disk=Get-CimInstance Win32_DiskDrive; $gpu=Get-CimInstance Win32_VideoController; @('Itchy Toolbox System Report','Tarih: '+(Get-Date),'PC: '+$env:COMPUTERNAME,'Kullanici: '+$env:USERNAME,'Windows: '+$os.Caption+' '+$os.Version,'RAM GB: '+[math]::Round($cs.TotalPhysicalMemory/1GB,1),'CPU: '+$cpu.Name,'','Diskler:') + ($disk^|ForEach-Object{'- '+$_.Model+' '+[math]::Round($_.Size/1GB,1)+' GB'}) + '' + 'Ekran Kartlari:' + ($gpu^|ForEach-Object{'- '+$_.Name+' '+$_.DriverVersion}) ^| Set-Content -Encoding UTF8 $out"
+if exist "!report_file!" echo   %GRN%[+] Kaydedildi: !report_file!%RST%
+pause
+exit /b
+
+
+:CREATE_NETWORK_REPORT
+set "report_file=%USERPROFILE%\Desktop\Itchy-Network-Report.txt"
+echo.
+echo   %YLW%-- Ag raporu olusturuluyor...%RST%
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$out='!report_file!'; @('Itchy Toolbox Network Report','Tarih: '+(Get-Date),'') ^| Set-Content -Encoding UTF8 $out; ipconfig /all ^| Add-Content -Encoding UTF8 $out; route print ^| Add-Content -Encoding UTF8 $out; Get-DnsClientServerAddress ^| Format-Table -AutoSize ^| Out-String ^| Add-Content -Encoding UTF8 $out"
+if exist "!report_file!" echo   %GRN%[+] Kaydedildi: !report_file!%RST%
+pause
+exit /b
+
+
+:RELAUNCH_ADMIN
+net session >nul 2>&1
+if !errorlevel! == 0 (
+    echo.
+    echo   %GRN%[+] Program zaten yonetici olarak calisiyor.%RST%
+    pause
+    exit /b
+)
+echo.
+echo   %YLW%-- Yonetici izni isteniyor...%RST%
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath $env:ComSpec -ArgumentList '/c','""!TOOLBOX_FILE!""' -Verb RunAs"
+exit /b
+
+
+:: ============================================================
+:: LISANS YONETIMI
+:: ============================================================
+:LICENSE_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Lisans Yonetimi%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Windows lisans durumunu goster
+echo   %CYN%[2]%RST% Windows lisans anahtari gir
+echo   %CYN%[3]%RST% Office lisans durumunu goster
+echo   %CYN%[4]%RST% Office lisans anahtari gir
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" cscript //nologo %windir%\system32\slmgr.vbs /dli
+if "!choice!"=="2" call :WINDOWS_KEY
+if "!choice!"=="3" call :OFFICE_STATUS
+if "!choice!"=="4" call :OFFICE_KEY
+pause
+goto :LICENSE_MENU
+
+
+:WINDOWS_KEY
+set "key="
+set /p "key=  Windows urun anahtari: "
+if not "!key!"=="" cscript //nologo %windir%\system32\slmgr.vbs /ipk !key!
+exit /b
+
+
+:FIND_OSPP
+set "OSPP="
+for %%p in ("%ProgramFiles%\Microsoft Office\Office16\OSPP.VBS" "%ProgramFiles(x86)%\Microsoft Office\Office16\OSPP.VBS" "%ProgramFiles%\Microsoft Office\Office15\OSPP.VBS" "%ProgramFiles(x86)%\Microsoft Office\Office15\OSPP.VBS") do (
+    if exist %%~p set "OSPP=%%~p"
+)
+exit /b
+
+
+:OFFICE_STATUS
+call :FIND_OSPP
+if "!OSPP!"=="" (
+    echo   %RED%[-] OSPP.VBS bulunamadi.%RST%
+) else (
+    cscript //nologo "!OSPP!" /dstatus
+)
+exit /b
+
+
+:OFFICE_KEY
+call :FIND_OSPP
+if "!OSPP!"=="" (
+    echo   %RED%[-] OSPP.VBS bulunamadi.%RST%
+    exit /b
+)
+set "key="
+set /p "key=  Office urun anahtari: "
+if not "!key!"=="" cscript //nologo "!OSPP!" /inpkey:!key!
+exit /b
+
+
+:: ============================================================
+:: SISTEM HAKKINDA
+:: ============================================================
+:SYSTEM_INFO
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Sistem Hakkinda%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='SilentlyContinue'; $cs=Get-CimInstance Win32_ComputerSystem; $os=Get-CimInstance Win32_OperatingSystem; $bb=Get-CimInstance Win32_BaseBoard; $bios=Get-CimInstance Win32_BIOS; $cpu=Get-CimInstance Win32_Processor; $gpu=Get-CimInstance Win32_VideoController; $disk=Get-CimInstance Win32_DiskDrive; $ram=Get-CimInstance Win32_PhysicalMemory; if(-not $os){ 'Sistem bilgisi okunamadi. Yonetici olarak calistirmayi deneyin.'; exit }; 'Bilgisayar adi: '+$env:COMPUTERNAME; 'Kullanici adi: '+$env:USERNAME; 'Sistem: '+$os.Caption+' '+$os.OSArchitecture; 'Format/Kurulum tarihi: '+$os.InstallDate; 'Kurulum turu: '+$os.InstallationType; 'Saat dilimi: '+(Get-TimeZone).DisplayName; 'Anakart: '+$bb.Manufacturer+' '+$bb.Product; 'BIOS: '+$bios.SMBIOSBIOSVersion; 'Islemci: '+$cpu.Name; 'Cekirdek/Thread: '+$cpu.NumberOfCores+'/'+$cpu.NumberOfLogicalProcessors; 'L2/L3 KB: '+$cpu.L2CacheSize+'/'+$cpu.L3CacheSize; 'Frekans MHz: '+$cpu.MaxClockSpeed; ''; 'Diskler:'; foreach($d in $disk){ '- '+$d.Model+' '+[math]::Round($d.Size/1GB,1)+' GB' }; ''; 'RAM:'; foreach($m in $ram){ '- '+$m.Manufacturer+' '+[math]::Round($m.Capacity/1GB,1)+' GB '+$m.Speed+' MHz Slot:'+$m.BankLabel }; ''; 'Ekran karti:'; foreach($g in $gpu){ '- '+$g.Name+' VRAM:'+([math]::Round($g.AdapterRAM/1GB,1))+' GB Surucu:'+$g.DriverVersion+' Tarih:'+$g.DriverDate }"
+echo.
+pause
+goto :MAIN_MENU
+
+
+:: ============================================================
+:: KAYITLI WIFI BILGILERI
+:: ============================================================
+:WIFI_INFO
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Kayitli WiFi Bilgileri%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$dir=Join-Path $env:TEMP 'ItchyWifiProfiles'; Remove-Item $dir -Recurse -Force -ErrorAction SilentlyContinue; New-Item -ItemType Directory -Path $dir | Out-Null; netsh wlan export profile key=clear folder=$dir | Out-Null; $files=Get-ChildItem $dir -Filter *.xml -ErrorAction SilentlyContinue; if(!$files){ 'Kayitli WiFi profili bulunamadi veya WiFi hizmeti kapali.'; exit }; foreach($f in $files){ [xml]$x=Get-Content $f.FullName; $ssid=$x.WLANProfile.SSIDConfig.SSID.name; $key=$x.WLANProfile.MSM.security.sharedKey.keyMaterial; if(!$key){$key='(sifre yok / okunamadi)'}; 'SSID: '+$ssid; 'Sifre: '+$key; '' }; Remove-Item $dir -Recurse -Force -ErrorAction SilentlyContinue"
+echo.
+pause
+goto :MAIN_MENU
 
 
 :: ============================================================
@@ -450,14 +1419,17 @@ exit /b
 cls
 echo.
 echo.
-echo   %MAG%%BLD%===============================================================%RST%
-echo   %MAG%%BLD%                         ITCHY TOOLBOX                         %RST%
-echo   %MAG%%BLD%===============================================================%RST%
+echo                     %GRY%█████ █████  ████ █   █ █   █%RST%     %YLW%█████  ███   ███  █     ████   ███  █   █%RST%
+echo                     %GRY%  █     █   █     █   █  █ █ %RST%     %YLW%  █   █   █ █   █ █     █   █ █   █  █ █ %RST%
+echo                     %GRY%  █     █   █     █████   █  %RST%     %YLW%  █   █   █ █   █ █     ████  █   █   █  %RST%
+echo                     %GRY%  █     █   █     █   █   █  %RST%     %YLW%  █   █   █ █   █ █     █   █ █   █  █ █ %RST%
+echo                     %GRY%█████   █    ████ █   █   █  %RST%     %YLW%  █    ███   ███  █████ ████   ███  █   █%RST%
 echo.
-echo   %GRY%                   Windows Sistem Yonetim Araci v0.1%RST%
-echo   %GRY%                   Gelistirici: Itchy%RST%
+echo                                      %GRY%created by: M.Mert%RST%
+echo                                      %GRY%Windows Sistem Yonetim Araci  v%VERSION%%RST%
+echo                                      %GRY%Gelistirici: Itchy%RST%
 echo.
-echo   %DIM%  Yukluyor...%RST%
+echo                                      %DIM%Yukluyor...%RST%
 ping -n 3 127.0.0.1 >nul
 exit /b
 
@@ -467,11 +1439,14 @@ exit /b
 :: ============================================================
 :BANNER
 echo.
-echo   %MAG%%BLD%+---------------------------------------------------------------+%RST%
-echo   %MAG%%BLD%                          ITCHY TOOLBOX                         %RST%
-echo   %MAG%%BLD%+---------------------------------------------------------------+%RST%
-echo   %GRY%  PC: %YLW%!MY_PC!   %GRY%^|   IP: %YLW%!MY_IP!   %GRY%^|   v0.1%RST%
-echo   %GRY%-----------------------------------------------------------------------%RST%
+echo      %GRY%█████ █████  ████ █   █ █   █%RST%     %YLW%█████  ███   ███  █     ████   ███  █   █%RST%
+echo      %GRY%  █     █   █     █   █  █ █ %RST%     %YLW%  █   █   █ █   █ █     █   █ █   █  █ █ %RST%
+echo      %GRY%  █     █   █     █████   █  %RST%     %YLW%  █   █   █ █   █ █     ████  █   █   █  %RST%
+echo      %GRY%  █     █   █     █   █   █  %RST%     %YLW%  █   █   █ █   █ █     █   █ █   █  █ █ %RST%
+echo      %GRY%█████   █    ████ █   █   █  %RST%     %YLW%  █    ███   ███  █████ ████   ███  █   █%RST%
+echo                                      %GRY%created by: M.Mert%RST%
+echo      %GRY%itchy toolbox v%VERSION%    PC:%YLW% !MY_PC! %GRY%  IP:%YLW% !MY_IP! %GRY%  Tarih:%YLW% %DATE%%RST%
+echo      %GRY%----------------------------------------------------------------------------------------------------%RST%
 exit /b
 
 
@@ -481,7 +1456,7 @@ exit /b
 :EXIT
 cls
 echo.
-echo   %MAG%%BLD%Gorusuruz^^!%RST%
+echo   %YLW%%BLD%Gorusuruz^^!%RST%
 echo   %CYN%Itchy Toolbox'i kullandiginiz icin tesekkurler.%RST%
 echo.
 ping -n 3 127.0.0.1 >nul
