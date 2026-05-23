@@ -207,8 +207,8 @@ set "APP[66]=GlassWire.GlassWire|GlassWire"
 set "APP[67]=Stremio.Stremio|Stremio"
 set "APP[68]=PuTTY.PuTTY|PuTTY"
 set "APP[69]=RARLab.WinRAR|WinRAR"
-set "APP[70]=CUSTOM|Itchy YouTube Downloader"
-set "APP[71]=CUSTOM|Itchy Backup"
+set "APP[70]=CUSTOM_ITCHY_DOWNLOADER|Itchy YouTube Downloader"
+set "APP[71]=CUSTOM_ITCHY_BACKUP|Itchy Backup"
 set "APP[72]=RevoUninstaller.RevoUninstaller|Revo"
 set "APP[73]=Wagnardsoft.DisplayDriverUninstaller|DDU"
 set "APP[74]=CUSTOM_JAVA_UNINSTALLER|Java Uninstaller"
@@ -594,6 +594,16 @@ if "!pkg!"=="CUSTOM_JAVA_UNINSTALLER" (
     exit /b
 )
 
+if "!pkg!"=="CUSTOM_ITCHY_DOWNLOADER" (
+    call :INSTALL_GITHUB_RELEASE "Bogazitchy" "Itchy-YouTube-Downloader" "Itchy YouTube Downloader" "Itchy-YouTube-Downloader-Setup"
+    exit /b
+)
+
+if "!pkg!"=="CUSTOM_ITCHY_BACKUP" (
+    call :INSTALL_GITHUB_RELEASE "Bogazitchy" "Itchy-Backup" "Itchy Backup" "Itchy-Backup-Setup"
+    exit /b
+)
+
 if "!pkg!"=="CUSTOM_MEMORYDIAG" (
     start "" mdsched.exe
     echo     %GRN%[+] Windows Bellek Tanilama acildi%RST%
@@ -650,6 +660,23 @@ if !errorlevel! == 0 (
     set /a ok_count+=1
 ) else (
     echo     %RED%[-] Indirme/baslatma basarisiz%RST%
+    set /a fail_count+=1
+)
+exit /b
+
+
+:INSTALL_GITHUB_RELEASE
+set "gh_owner=%~1"
+set "gh_repo=%~2"
+set "gh_name=%~3"
+set "gh_file=%~4"
+echo     %YLW%[~] !gh_name! GitHub latest release uzerinden indiriliyor...%RST%
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$dir=Join-Path $env:TEMP 'ItchyDownloads'; New-Item -ItemType Directory -Force -Path $dir ^| Out-Null; try { $api='https://api.github.com/repos/!gh_owner!/!gh_repo!/releases/latest'; $release=Invoke-RestMethod -Headers @{'User-Agent'='ItchyToolbox'} -Uri $api; $assets=@($release.assets); $asset=$assets ^| Where-Object { $_.name -match '(?i)(setup|install).*\.(exe|msi)$' } ^| Select-Object -First 1; if(-not $asset){ $asset=$assets ^| Where-Object { $_.name -match '(?i)\.(exe|msi)$' -and $_.name -notmatch '(?i)portable' } ^| Select-Object -First 1 }; if(-not $asset){ throw 'Release icinde setup exe/msi bulunamadi' }; $ext=[IO.Path]::GetExtension($asset.name); $out=Join-Path $dir ('!gh_file!'+$ext); Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $out -UseBasicParsing; Start-Process -FilePath $out; exit 0 } catch { Write-Host $_.Exception.Message; exit 1 }"
+if !errorlevel! == 0 (
+    echo     %GRN%[+] Indirildi ve baslatildi%RST%
+    set /a ok_count+=1
+) else (
+    echo     %RED%[-] !gh_name! indirilemedi%RST%
     set /a fail_count+=1
 )
 exit /b

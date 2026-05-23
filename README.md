@@ -67,6 +67,8 @@ Bazi uygulamalar `winget` manifest hatasi, hash uyusmazligi, Microsoft Store kay
 - Malwarebytes: `winget` 403 hatasi yerine resmi Malwarebytes indirme adresi kullanilir.
 - IObit Unlocker: `winget` hash sorunu yerine resmi indirme adresi kullanilir.
 - Java Uninstaller: Oracle Java Uninstall Tool indirilip baslatilir.
+- Itchy YouTube Downloader: [Bogazitchy/Itchy-YouTube-Downloader](https://github.com/Bogazitchy/Itchy-YouTube-Downloader) reposunun en guncel release setup dosyasi indirilip baslatilir.
+- Itchy Backup: [Bogazitchy/Itchy-Backup](https://github.com/Bogazitchy/Itchy-Backup) reposunun en guncel release setup dosyasi indirilip baslatilir.
 
 Bu uygulamalar uygulama listesinde `*` ile isaretlenir.
 
