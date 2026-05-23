@@ -1,0 +1,16 @@
+# Local scratch and backup files
+*.tmp
+*.bak
+__test_*
+__test-*
+
+# Local legacy/experiment files
+Itchy ToolBox. tam deneme.cmd
+.claude/
+Ana/
+Ana
+
+# Generated reports
+Itchy-System-Report.html
+Itchy-Network-Report.html
+Itchy-Winget-Apps.json
