@@ -6,7 +6,7 @@
 setlocal EnableDelayedExpansion
 chcp 65001 >nul
 title I T C H Y   T O O L B O X
-set "VERSION=0.4"
+set "VERSION=0.5"
 set "TOOLBOX_FILE=%~f0"
 set "TOOLBOX_DIR=%~dp0"
 set "DATA_DIR=%USERPROFILE%\Desktop\Itchy-Toolbox-Data"
@@ -31,6 +31,8 @@ set "YLW=%ESC%[93m"
 set "MAG=%ESC%[95m"
 set "CYN=%ESC%[96m"
 set "GRY=%ESC%[90m"
+set "BLK=#"
+for /f "delims=" %%b in ('powershell -NoProfile -Command "[Console]::OutputEncoding=[Text.Encoding]::UTF8; [char]0x2588"') do set "BLK=%%b"
 call :APPLY_THEME
 
 :: Sistem bilgisi
@@ -64,25 +66,14 @@ if !errorlevel! == 0 (
 echo.
 
 echo   %CYN%[1]%RST% Uygulama Yukleyici
-echo   %CYN%[2]%RST% Hizmet Yonetimi
-echo   %CYN%[3]%RST% Ozellik Yonetimi
-echo   %CYN%[4]%RST% PC Zaman Ayarli Kapat
-echo   %CYN%[5]%RST% Ping Olcer / DNS Degistirici
-echo   %CYN%[6]%RST% Lisans Yonetimi
-echo   %CYN%[7]%RST% Sistem Hakkinda
-echo   %CYN%[8]%RST% Kayitli WiFi Bilgileri
-echo   %CYN%[9]%RST% Kurulum Profilleri
-echo   %CYN%[10]%RST% Windows Onarim
-echo   %CYN%[11]%RST% Yedekleme / Geri Yukleme
-echo   %CYN%[12]%RST% Sistem Araclari
-echo   %CYN%[13]%RST% Ag Onarim / Rapor
-echo   %CYN%[14]%RST% Yonetici Olarak Yeniden Baslat
-echo   %CYN%[15]%RST% On Kontrol
-echo   %CYN%[16]%RST% Kurulum Sonrasi Kontrol
-echo   %CYN%[17]%RST% Surucu Yardimci
-echo   %CYN%[18]%RST% Windows Ayarlari
-echo   %CYN%[19]%RST% Bakim Profilleri
-echo   %CYN%[20]%RST% Log / Ayar / Guncelleme
+echo   %CYN%[2]%RST% Kurulum Profilleri
+echo   %CYN%[3]%RST% Windows Yonetimi
+echo   %CYN%[4]%RST% Ag Araclari
+echo   %CYN%[5]%RST% Rapor / Kontrol
+echo   %CYN%[6]%RST% Yedekleme / Kurtarma
+echo   %CYN%[7]%RST% Lisans / Bilgi
+echo   %CYN%[8]%RST% Bakim / Ayar / Guncelleme
+echo   %CYN%[9]%RST% Yonetici Olarak Yeniden Baslat
 echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo   %DIM%[sayi] sec   [q] cikis%RST%
@@ -93,25 +84,184 @@ set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 
 if /i "!choice!"=="q" goto :EXIT
 if "!choice!"=="1" goto :APP_INSTALLER
-if "!choice!"=="2" goto :SERVICE_MENU
-if "!choice!"=="3" goto :FEATURE_MENU
-if "!choice!"=="4" goto :SHUTDOWN_TIMER
-if "!choice!"=="5" goto :PING_DNS_MENU
-if "!choice!"=="6" goto :LICENSE_MENU
-if "!choice!"=="7" goto :SYSTEM_INFO
-if "!choice!"=="8" goto :WIFI_INFO
-if "!choice!"=="9" goto :STANDARD_INSTALLER
-if "!choice!"=="10" goto :WINDOWS_REPAIR
-if "!choice!"=="11" goto :BACKUP_RECOVERY_MENU
-if "!choice!"=="12" goto :SYSTEM_TOOLS_MENU
-if "!choice!"=="13" goto :NETWORK_REPORT_MENU
-if "!choice!"=="14" call :RELAUNCH_ADMIN
-if "!choice!"=="15" goto :PRECHECK_MENU
-if "!choice!"=="16" goto :POST_INSTALL_MENU
-if "!choice!"=="17" goto :DRIVER_HELPER_MENU
-if "!choice!"=="18" goto :WINDOWS_SETTINGS_MENU
-if "!choice!"=="19" goto :MAINTENANCE_PROFILES
-if "!choice!"=="20" goto :LOG_SETTINGS_MENU
+if "!choice!"=="2" goto :STANDARD_INSTALLER
+if "!choice!"=="3" goto :WINDOWS_MANAGEMENT_MENU
+if "!choice!"=="4" goto :NETWORK_TOOLS_MENU
+if "!choice!"=="5" goto :REPORT_CONTROL_MENU
+if "!choice!"=="6" goto :BACKUP_RECOVERY_MENU
+if "!choice!"=="7" goto :LICENSE_INFO_MENU
+if "!choice!"=="8" goto :MAINT_SETTINGS_MENU
+if "!choice!"=="9" call :RELAUNCH_ADMIN
+goto :MAIN_MENU
+
+
+:: ============================================================
+:: WINDOWS YONETIMI
+:: ============================================================
+:WINDOWS_MANAGEMENT_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Windows Yonetimi%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Windows Onarim
+echo   %CYN%[2]%RST% Hizmet Yonetimi
+echo   %CYN%[3]%RST% Ozellik Yonetimi
+echo   %CYN%[4]%RST% Windows Ayarlari
+echo   %CYN%[5]%RST% Sistem Araclari
+echo   %CYN%[6]%RST% Surucu Yardimci
+echo   %CYN%[7]%RST% PC Zaman Ayarli Kapat
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
+if "!choice!"=="1" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :WINDOWS_REPAIR)
+if "!choice!"=="2" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :SERVICE_MENU)
+if "!choice!"=="3" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :FEATURE_MENU)
+if "!choice!"=="4" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :WINDOWS_SETTINGS_MENU)
+if "!choice!"=="5" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :SYSTEM_TOOLS_MENU)
+if "!choice!"=="6" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :DRIVER_HELPER_MENU)
+if "!choice!"=="7" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :SHUTDOWN_TIMER)
+goto :WINDOWS_MANAGEMENT_MENU
+
+
+:: ============================================================
+:: AG ARACLARI
+:: ============================================================
+:NETWORK_TOOLS_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Ag Araclari%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Ping Olcer / DNS Degistirici
+echo   %CYN%[2]%RST% Ag onarim komutlari
+echo   %CYN%[3]%RST% IP ve bagdastirici bilgisini goster
+echo   %CYN%[4]%RST% Detayli ag raporu olustur
+echo   %CYN%[5]%RST% Kayitli WiFi bilgileri
+echo   %CYN%[6]%RST% Windows ag ayarlarini ac
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
+if "!choice!"=="1" (set "RETURN_MENU=NETWORK_TOOLS_MENU" & goto :PING_DNS_MENU)
+if "!choice!"=="2" call :NETWORK_REPAIR
+if "!choice!"=="3" (
+    ipconfig /all
+    pause
+)
+if "!choice!"=="4" call :CREATE_NETWORK_REPORT
+if "!choice!"=="5" (set "RETURN_MENU=NETWORK_TOOLS_MENU" & goto :WIFI_INFO)
+if "!choice!"=="6" start "" ms-settings:network
+goto :NETWORK_TOOLS_MENU
+
+
+:: ============================================================
+:: RAPOR / KONTROL
+:: ============================================================
+:REPORT_CONTROL_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Rapor / Kontrol%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% On Kontrol
+echo   %CYN%[2]%RST% Kurulum Sonrasi Kontrol
+echo   %CYN%[3]%RST% Sistem Hakkinda
+echo   %CYN%[4]%RST% Detayli sistem raporu olustur
+echo   %CYN%[5]%RST% Detayli ag raporu olustur
+echo   %CYN%[6]%RST% Kurulum HTML raporu olustur
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
+if "!choice!"=="1" (set "RETURN_MENU=REPORT_CONTROL_MENU" & goto :PRECHECK_MENU)
+if "!choice!"=="2" (set "RETURN_MENU=REPORT_CONTROL_MENU" & goto :POST_INSTALL_MENU)
+if "!choice!"=="3" (set "RETURN_MENU=REPORT_CONTROL_MENU" & goto :SYSTEM_INFO)
+if "!choice!"=="4" call :CREATE_SYSTEM_REPORT
+if "!choice!"=="5" call :CREATE_NETWORK_REPORT
+if "!choice!"=="6" call :CREATE_INSTALL_REPORT
+goto :REPORT_CONTROL_MENU
+
+
+:: ============================================================
+:: LISANS / BILGI
+:: ============================================================
+:LICENSE_INFO_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Lisans / Bilgi%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Lisans Yonetimi
+echo   %CYN%[2]%RST% Sistem Hakkinda
+echo   %CYN%[3]%RST% Kayitli WiFi Bilgileri
+echo   %CYN%[4]%RST% Detayli sistem raporu olustur
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
+if "!choice!"=="1" (set "RETURN_MENU=LICENSE_INFO_MENU" & goto :LICENSE_MENU)
+if "!choice!"=="2" (set "RETURN_MENU=LICENSE_INFO_MENU" & goto :SYSTEM_INFO)
+if "!choice!"=="3" (set "RETURN_MENU=LICENSE_INFO_MENU" & goto :WIFI_INFO)
+if "!choice!"=="4" call :CREATE_SYSTEM_REPORT
+goto :LICENSE_INFO_MENU
+
+
+:: ============================================================
+:: BAKIM / AYAR / GUNCELLEME
+:: ============================================================
+:MAINT_SETTINGS_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Bakim / Ayar / Guncelleme%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Bakim Profilleri
+echo   %CYN%[2]%RST% Log / Ayar / Guncelleme
+echo   %CYN%[3]%RST% Rapor klasoru ayarla
+echo   %CYN%[4]%RST% Tema ayarla
+echo   %CYN%[5]%RST% Splash ac/kapat
+echo   %CYN%[6]%RST% GitHub'dan toolbox guncelle
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
+if "!choice!"=="1" (set "RETURN_MENU=MAINT_SETTINGS_MENU" & goto :MAINTENANCE_PROFILES)
+if "!choice!"=="2" (set "RETURN_MENU=MAINT_SETTINGS_MENU" & goto :LOG_SETTINGS_MENU)
+if "!choice!"=="3" call :SET_REPORT_DIR
+if "!choice!"=="4" call :SET_THEME
+if "!choice!"=="5" call :TOGGLE_SPLASH
+if "!choice!"=="6" call :SELF_UPDATE
+goto :MAINT_SETTINGS_MENU
+
+
+:RETURN_OR_MAIN
+if defined RETURN_MENU (
+    set "next_menu=!RETURN_MENU!"
+    set "RETURN_MENU="
+    goto :!next_menu!
+)
 goto :MAIN_MENU
 
 
@@ -149,7 +299,7 @@ set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if /i "!choice!"=="r" (
     call :RETRY_FAILED_APPS
     goto :APP_INSTALLER
@@ -249,16 +399,15 @@ exit /b
 
 :PRINT_APP_CATEGORIES
 call :LOAD_APP_GRID
-echo   %GRY%┌───────────────────────────────────┬───────────────────────────────────┬───────────────────────────────────┐%RST%
+echo   %GRY%+-----------------------------------+-----------------------------------+-----------------------------------+%RST%
 for /l %%r in (1,1,!APP_GRID_ROWS!) do (
     call :MAKE_APP_GRID_CELL 1 %%r app_cell_1
     call :MAKE_APP_GRID_CELL 2 %%r app_cell_2
     call :MAKE_APP_GRID_CELL 3 %%r app_cell_3
-    echo   %GRY%│%RST%!app_cell_1!%GRY%│%RST%!app_cell_2!%GRY%│%RST%!app_cell_3!%GRY%│%RST%
+    echo   %GRY%^|%RST%!app_cell_1!%GRY%^|%RST%!app_cell_2!%GRY%^|%RST%!app_cell_3!%GRY%^|%RST%
 )
-echo   %GRY%└───────────────────────────────────┴───────────────────────────────────┴───────────────────────────────────┘%RST%
+echo   %GRY%+-----------------------------------+-----------------------------------+-----------------------------------+%RST%
 exit /b
-
 
 :LOAD_APP_GRID
 set "APP_GRID_ROWS=34"
@@ -371,7 +520,7 @@ for /f "tokens=1,2 delims=|" %%a in ("!grid_entry!") do (
     set "grid_value=%%b"
 )
 if "!grid_type!"=="CAT" (
-    set "grid_text= ▼ !grid_value!                                   "
+    set "grid_text= v !grid_value!                                   "
     set "grid_text=!grid_text:~0,35!"
     set "%~3=%GRY%!grid_text!%RST%"
     exit /b
@@ -481,7 +630,7 @@ set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" call :INSTALL_PROFILE "Standart cihaz" "40 9 46 36 69 47"
 if "!choice!"=="2" call :INSTALL_PROFILE "Teknik servis" "40 9 46 36 69 47 64 23 25 26 27 72 63"
 if "!choice!"=="3" call :INSTALL_PROFILE "Oyun ve medya" "6 8 31 33 34 35 36 37 57 58 60"
@@ -937,7 +1086,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 call :SERVICE_DETAIL "!choice!"
 goto :SERVICE_MENU
 
@@ -1097,7 +1246,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 call :FEATURE_DETAIL "!choice!"
 goto :FEATURE_MENU
 
@@ -1246,7 +1395,7 @@ echo.
 set "mins="
 set /p "mins=  %GRN%Dakika/Secim: %RST%" || goto :EXIT
 if /i "!mins!"=="q" goto :EXIT
-if /i "!mins!"=="x" goto :MAIN_MENU
+if /i "!mins!"=="x" goto :RETURN_OR_MAIN
 if /i "!mins!"=="i" (
     shutdown /a
     pause
@@ -1258,7 +1407,7 @@ shutdown /s /t !secs!
 echo.
 echo   %GRN%[+] Kapatma talimati verildi: !mins! dakika sonra.%RST%
 pause
-goto :MAIN_MENU
+goto :RETURN_OR_MAIN
 
 
 :: ============================================================
@@ -1284,7 +1433,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if /i "!choice!"=="p" call :CUSTOM_PING
 if /i "!choice!"=="d" call :CUSTOM_DNS
 if "!choice!"=="1" call :DNS_TESTS
@@ -1398,7 +1547,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" call :REPAIR_CHKDSK
 if "!choice!"=="2" call :REPAIR_DISM_SFC
 if "!choice!"=="3" start "" cleanmgr.exe
@@ -1496,7 +1645,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" call :CREATE_RESTORE_POINT
 if "!choice!"=="2" start "" rstrui.exe
 if "!choice!"=="3" start "" control.exe /name Microsoft.FileHistory
@@ -1530,7 +1679,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" start "" devmgmt.msc
 if "!choice!"=="2" start "" diskmgmt.msc
 if "!choice!"=="3" start "" services.msc
@@ -1571,7 +1720,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" call :NETWORK_REPAIR
 if "!choice!"=="2" (
     ipconfig /all
@@ -1655,7 +1804,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" call :PRECHECK_CONSOLE
 if "!choice!"=="2" call :PRECHECK_HTML
 goto :PRECHECK_MENU
@@ -1706,7 +1855,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" call :CREATE_INSTALL_REPORT
 if "!choice!"=="2" call :RETRY_FAILED_APPS
 if "!choice!"=="3" (
@@ -1742,7 +1891,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" start "" devmgmt.msc
 if "!choice!"=="2" start "" ms-settings:windowsupdate
 if "!choice!"=="3" start "" "https://www.nvidia.com/Download/index.aspx"
@@ -1779,7 +1928,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" start "" ms-settings:activation
 if "!choice!"=="2" start "" ms-settings:windowsupdate
 if "!choice!"=="3" start "" ms-settings:defaultapps
@@ -1813,7 +1962,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" call :MAINT_LIGHT
 if "!choice!"=="2" call :MAINT_DEEP
 if "!choice!"=="3" call :NETWORK_REPAIR
@@ -1868,7 +2017,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" type "%LAST_INSTALL_LOG%" & pause
 if "!choice!"=="2" start "" "%DATA_DIR%"
 if "!choice!"=="3" call :CREATE_INSTALL_REPORT
@@ -1899,7 +2048,7 @@ echo.
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
-if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" cscript //nologo %windir%\system32\slmgr.vbs /dli
 if "!choice!"=="2" call :WINDOWS_KEY
 if "!choice!"=="3" call :OFFICE_STATUS
@@ -1958,7 +2107,7 @@ echo.
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='SilentlyContinue'; $cs=Get-CimInstance Win32_ComputerSystem; $os=Get-CimInstance Win32_OperatingSystem; $bb=Get-CimInstance Win32_BaseBoard; $bios=Get-CimInstance Win32_BIOS; $cpu=Get-CimInstance Win32_Processor; $gpu=Get-CimInstance Win32_VideoController; $disk=Get-CimInstance Win32_DiskDrive; $ram=Get-CimInstance Win32_PhysicalMemory; if(-not $os){ 'Sistem bilgisi okunamadi. Yonetici olarak calistirmayi deneyin.'; exit }; 'Bilgisayar adi: '+$env:COMPUTERNAME; 'Kullanici adi: '+$env:USERNAME; 'Sistem: '+$os.Caption+' '+$os.OSArchitecture; 'Format/Kurulum tarihi: '+$os.InstallDate; 'Kurulum turu: '+$os.InstallationType; 'Saat dilimi: '+(Get-TimeZone).DisplayName; 'Anakart: '+$bb.Manufacturer+' '+$bb.Product; 'BIOS: '+$bios.SMBIOSBIOSVersion; 'Islemci: '+$cpu.Name; 'Cekirdek/Thread: '+$cpu.NumberOfCores+'/'+$cpu.NumberOfLogicalProcessors; 'L2/L3 KB: '+$cpu.L2CacheSize+'/'+$cpu.L3CacheSize; 'Frekans MHz: '+$cpu.MaxClockSpeed; ''; 'Diskler:'; foreach($d in $disk){ '- '+$d.Model+' '+[math]::Round($d.Size/1GB,1)+' GB' }; ''; 'RAM:'; foreach($m in $ram){ '- '+$m.Manufacturer+' '+[math]::Round($m.Capacity/1GB,1)+' GB '+$m.Speed+' MHz Slot:'+$m.BankLabel }; ''; 'Ekran karti:'; foreach($g in $gpu){ '- '+$g.Name+' VRAM:'+([math]::Round($g.AdapterRAM/1GB,1))+' GB Surucu:'+$g.DriverVersion+' Tarih:'+$g.DriverDate }"
 echo.
 pause
-goto :MAIN_MENU
+goto :RETURN_OR_MAIN
 
 
 :: ============================================================
@@ -1974,7 +2123,7 @@ echo.
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$dir=Join-Path $env:TEMP 'ItchyWifiProfiles'; Remove-Item $dir -Recurse -Force -ErrorAction SilentlyContinue; New-Item -ItemType Directory -Path $dir | Out-Null; netsh wlan export profile key=clear folder=$dir | Out-Null; $files=Get-ChildItem $dir -Filter *.xml -ErrorAction SilentlyContinue; if(-not $files){ 'Kayitli WiFi profili bulunamadi veya WiFi hizmeti kapali.'; exit }; foreach($f in $files){ [xml]$x=Get-Content $f.FullName; $ssid=$x.WLANProfile.SSIDConfig.SSID.name; $key=$x.WLANProfile.MSM.security.sharedKey.keyMaterial; if(-not $key){$key='(sifre yok / okunamadi)'}; 'SSID: '+$ssid; 'Sifre: '+$key; '' }; Remove-Item $dir -Recurse -Force -ErrorAction SilentlyContinue"
 echo.
 pause
-goto :MAIN_MENU
+goto :RETURN_OR_MAIN
 
 
 :: ============================================================
@@ -2085,11 +2234,11 @@ exit /b
 cls
 echo.
 echo.
-echo                     %GRY%█████ █████  ████ █   █ █   █%RST%     %YLW%█████  ███   ███  █     ████   ███  █   █%RST%
-echo                     %GRY%  █     █   █     █   █  █ █ %RST%     %YLW%  █   █   █ █   █ █     █   █ █   █  █ █ %RST%
-echo                     %GRY%  █     █   █     █████   █  %RST%     %YLW%  █   █   █ █   █ █     ████  █   █   █  %RST%
-echo                     %GRY%  █     █   █     █   █   █  %RST%     %YLW%  █   █   █ █   █ █     █   █ █   █  █ █ %RST%
-echo                     %GRY%█████   █    ████ █   █   █  %RST%     %YLW%  █    ███   ███  █████ ████   ███  █   █%RST%
+echo              %GRY%!BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!   !BLK! !BLK!   !BLK!%RST%  %YLW%!BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!     !BLK!!BLK!!BLK!!BLK!  !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!   !BLK!%RST%
+echo              %GRY%  !BLK!     !BLK!   !BLK!     !BLK!   !BLK!  !BLK! !BLK! %RST%  %YLW%  !BLK!   !BLK!   !BLK! !BLK!   !BLK! !BLK!     !BLK!   !BLK! !BLK!   !BLK!  !BLK! !BLK! %RST%
+echo              %GRY%  !BLK!     !BLK!   !BLK!     !BLK!!BLK!!BLK!!BLK!!BLK!   !BLK!  %RST%  %YLW%  !BLK!   !BLK!   !BLK! !BLK!   !BLK! !BLK!     !BLK!!BLK!!BLK!!BLK!  !BLK!   !BLK!   !BLK!  %RST%
+echo              %GRY%  !BLK!     !BLK!   !BLK!     !BLK!   !BLK!   !BLK!  %RST%  %YLW%  !BLK!   !BLK!   !BLK! !BLK!   !BLK! !BLK!     !BLK!   !BLK! !BLK!   !BLK!  !BLK! !BLK! %RST%
+echo              %GRY%!BLK!!BLK!!BLK!!BLK!!BLK!   !BLK!   !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!   !BLK!   !BLK!  %RST%  %YLW%  !BLK!   !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!  !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!   !BLK!%RST%
 echo.
 echo                                      %GRY%created by: M.Mert%RST%
 echo                                      %GRY%Windows Sistem Yonetim Araci  v%VERSION%%RST%
@@ -2099,24 +2248,20 @@ echo                                      %DIM%Yukluyor...%RST%
 ping -n 3 127.0.0.1 >nul
 exit /b
 
-
-:: ============================================================
 :: BANNER
 :: ============================================================
 :BANNER
 echo.
-echo      %GRY%█████ █████  ████ █   █ █   █%RST%     %YLW%█████  ███   ███  █     ████   ███  █   █%RST%
-echo      %GRY%  █     █   █     █   █  █ █ %RST%     %YLW%  █   █   █ █   █ █     █   █ █   █  █ █ %RST%
-echo      %GRY%  █     █   █     █████   █  %RST%     %YLW%  █   █   █ █   █ █     ████  █   █   █  %RST%
-echo      %GRY%  █     █   █     █   █   █  %RST%     %YLW%  █   █   █ █   █ █     █   █ █   █  █ █ %RST%
-echo      %GRY%█████   █    ████ █   █   █  %RST%     %YLW%  █    ███   ███  █████ ████   ███  █   █%RST%
+echo      %GRY%!BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!   !BLK! !BLK!   !BLK!%RST%  %YLW%!BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!     !BLK!!BLK!!BLK!!BLK!  !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!   !BLK!%RST%
+echo      %GRY%  !BLK!     !BLK!   !BLK!     !BLK!   !BLK!  !BLK! !BLK! %RST%  %YLW%  !BLK!   !BLK!   !BLK! !BLK!   !BLK! !BLK!     !BLK!   !BLK! !BLK!   !BLK!  !BLK! !BLK! %RST%
+echo      %GRY%  !BLK!     !BLK!   !BLK!     !BLK!!BLK!!BLK!!BLK!!BLK!   !BLK!  %RST%  %YLW%  !BLK!   !BLK!   !BLK! !BLK!   !BLK! !BLK!     !BLK!!BLK!!BLK!!BLK!  !BLK!   !BLK!   !BLK!  %RST%
+echo      %GRY%  !BLK!     !BLK!   !BLK!     !BLK!   !BLK!   !BLK!  %RST%  %YLW%  !BLK!   !BLK!   !BLK! !BLK!   !BLK! !BLK!     !BLK!   !BLK! !BLK!   !BLK!  !BLK! !BLK! %RST%
+echo      %GRY%!BLK!!BLK!!BLK!!BLK!!BLK!   !BLK!   !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!   !BLK!   !BLK!  %RST%  %YLW%  !BLK!   !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!  !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!   !BLK!%RST%
 echo                                      %GRY%created by: M.Mert%RST%
 echo      %GRY%itchy toolbox v%VERSION%    PC:%YLW% !MY_PC! %GRY%  IP:%YLW% !MY_IP! %GRY%  Tarih:%YLW% %DATE%%RST%
 echo      %GRY%----------------------------------------------------------------------------------------------------%RST%
 exit /b
 
-
-:: ============================================================
 :: CIKIS
 :: ============================================================
 :EXIT

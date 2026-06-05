@@ -6,7 +6,31 @@ Program; uygulama kurulumu, Windows onarim komutlari, hizmet ve ozellik yonetimi
 
 GitHub: [Bogazitchy/Itchy-Toolbox](https://github.com/Bogazitchy/Itchy-Toolbox)
 
+Guncel surum: `0.5`
+
 ## Ozellikler
+
+### Sadelestirilmis Ana Menu
+
+Ana menu 20 ayri giris yerine 9 ust kategoriye toparlanmistir. Eski islevler silinmeden daha okunabilir basliklar altina alinmistir:
+
+- Uygulama Yukleyici
+- Kurulum Profilleri
+- Windows Yonetimi
+- Ag Araclari
+- Rapor / Kontrol
+- Yedekleme / Kurtarma
+- Lisans / Bilgi
+- Bakim / Ayar / Guncelleme
+- Yonetici Olarak Yeniden Baslat
+
+### Arayuz
+
+- Pixel tarzinda `ITCHY TOOLBOX` acilis ve ust banner
+- Gri `ITCHY`, renkli `TOOLBOX` ayrimi
+- CMD uyumlu sade tablo cizgileri
+- Bozulmaya acik Unicode kutu cizgileri yerine guvenli ASCII kaynak yapisi
+- `x` ile geri donuste mumkunse ilgili ust kategoriye donen daha rahat gezinme
 
 ### Uygulama Yukleyici
 
@@ -78,10 +102,10 @@ Bu uygulamalar uygulama listesinde `*` ile isaretlenir.
 - Hizmet Yonetimi
 - Ozellik Yonetimi
 - Windows Onarim
+- Windows Ayarlari
+- Sistem Araclari
+- Surucu Yardimci
 - PC zaman ayarli kapatma
-- Lisans Yonetimi
-- Sistem Hakkinda
-- Kayitli WiFi Bilgileri
 
 ### Windows Onarim
 
@@ -97,9 +121,9 @@ Windows Onarim menusu su islemleri toplar:
 - Windows Update bilesenlerini sifirlama
 - Ag onarim komutlari
 
-### Ag ve DNS
+### Ag Araclari
 
-Ping Olcer / DNS Degistirici menusu:
+Ag Araclari menusu ag ile ilgili islemleri tek baslikta toplar:
 
 - Tanimli sitelerin ping ve DNS surelerini anlik gosterir
 - Girilen alan adi icin ping olcer
@@ -107,16 +131,25 @@ Ping Olcer / DNS Degistirici menusu:
 - Cloudflare, AdGuard, Quad9, ControlD ve Google DNS sunucularini test eder
 - Aktif ag bagdastiricilarinda DNS degistirebilir
 - DNS ayarlarini otomatik moda alabilir
-
-Ag Onarim / Rapor menusu:
-
 - DNS onbellegini temizler
 - Winsock ve IP reset komutlarini calistirir
 - IP ve bagdastirici bilgisini gosterir
-- Masaustune detayli HTML sistem raporu olusturur
 - Masaustune detayli HTML ag raporu olusturur
+- Kayitli WiFi bilgilerini gosterir
+- Windows ag ayarlarini acar
 
 HTML raporlar koyu temali, tablolu ve teknik servis kontrolune uygun okunabilir bir formatta uretilir.
+
+### Rapor / Kontrol
+
+Rapor / Kontrol menusu cihaz kontrolu ve raporlama islerini tek yerde toplar:
+
+- On Kontrol
+- Kurulum Sonrasi Kontrol
+- Sistem Hakkinda
+- Detayli sistem raporu
+- Detayli ag raporu
+- Kurulum HTML raporu
 
 ### On Kontrol
 
@@ -170,6 +203,13 @@ Aktivasyon, Windows Update, varsayilan uygulamalar, ag, depolama, baslangic uygu
 - Tema ayari yapar
 - Splash ekranini acip kapatir
 - Toolbox'i GitHub `main` uzerinden gunceller
+
+### Lisans / Bilgi
+
+- Windows ve Office lisans islemleri
+- Sistem Hakkinda
+- Kayitli WiFi Bilgileri
+- Detayli sistem raporu
 
 ### Yedekleme ve Geri Yukleme
 
@@ -249,7 +289,7 @@ Depoda yalnizca aktif kullanilan dosyalar tutulmalidir. Yerel deneme, yedek veya
 
 ## Surum
 
-Guncel toolbox surumu: `0.4`
+Guncel toolbox surumu: `0.5`
 
 ## Gelistirici
 
