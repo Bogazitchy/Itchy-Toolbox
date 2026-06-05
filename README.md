@@ -16,6 +16,7 @@ GitHub: [Bogazitchy/Itchy-Toolbox](https://github.com/Bogazitchy/Itchy-Toolbox)
 - Ozel kurulum isaretli uygulamalar
 - Standart teknik servis uygulamalarina hizli erisim
 - Sorunlu `winget` paketleri icin ozel indirme/kurulum akisi
+- Kurulum logu, basarisizlari tekrar deneme ve HTML kurulum raporu
 
 Mevcut uygulama kategorileri:
 
@@ -117,6 +118,59 @@ Ag Onarim / Rapor menusu:
 
 HTML raporlar koyu temali, tablolu ve teknik servis kontrolune uygun okunabilir bir formatta uretilir.
 
+### On Kontrol
+
+On Kontrol menusu cihaz kuruluma hazir mi hizlica denetler:
+
+- Yonetici yetkisi
+- Internet testi
+- Winget varligi
+- Windows surumu
+- Lisans durumu
+- RAM ve bos disk alani
+- Bekleyen yeniden baslatma kontrolu
+
+Sonuc ekrana yazdirilabilir veya `Itchy-Precheck-Report.html` olarak kaydedilebilir.
+
+### Kurulum Sonrasi Kontrol
+
+- Son kurulum HTML raporu
+- Basarisiz kurulumlari tekrar deneme
+- Winget kurulu uygulama listesi
+- Windows Update
+- Aygit Yoneticisi
+- Sistem HTML raporu
+
+### Surucu Yardimci
+
+Riskli otomatik surucu kurulumlari yerine guvenli kisayollar sunar:
+
+- Aygit Yoneticisi
+- Windows Update
+- NVIDIA, AMD ve Intel surucu sayfalari
+- Anakart/CPU bilgisi icin sistem raporu
+- DDU kurulumu
+
+### Windows Ayarlari
+
+Aktivasyon, Windows Update, varsayilan uygulamalar, ag, depolama, baslangic uygulamalari, guc secenekleri, uzak masaustu, Bluetooth ve yazici ayarlarina hizli erisim saglar.
+
+### Bakim Profilleri
+
+- Hafif bakim: DNS temizleme, temp temizleme ve kurulum raporu
+- Derin bakim: geri yukleme noktasi, DISM/SFC ve sistem raporu
+- Ag bakim: DNS/Winsock/IP onarimi
+- Cihaz teslim raporu: on kontrol, sistem raporu, ag raporu ve kurulum raporu
+
+### Log / Ayar / Guncelleme
+
+- Son kurulum logunu gosterir
+- Log klasorunu acar
+- Rapor klasoru ayari yapar
+- Tema ayari yapar
+- Splash ekranini acip kapatir
+- Toolbox'i GitHub `main` uzerinden gunceller
+
 ### Yedekleme ve Geri Yukleme
 
 - Sistem geri yukleme noktasi olusturma
@@ -169,8 +223,12 @@ Ana menudeki `Yonetici Olarak Yeniden Baslat` secenegi ile araci yukseltilmis iz
 Program bazi seceneklerde masaustune dosya olusturabilir:
 
 - `Itchy-Winget-Apps.json`
+- `Itchy-Precheck-Report.html`
+- `Itchy-Install-Report.html`
 - `Itchy-System-Report.html`
 - `Itchy-Network-Report.html`
+- `Itchy-Toolbox-Data\Logs\Itchy-Toolbox.log`
+- `Itchy-Toolbox-Data\last-install-log.csv`
 
 ## Guvenli Kullanim Notlari
 
@@ -184,13 +242,14 @@ Program bazi seceneklerde masaustune dosya olusturabilir:
 
 - `Itchy ToolBox.cmd`: Ana program
 - `Itchy.Reports.ps1`: HTML rapor uretici
+- `Itchy.Tools.ps1`: On kontrol, kurulum raporu ve self-update yardimcisi
 - `README.md`: Proje aciklamasi ve kullanim notlari
 
 Depoda yalnizca aktif kullanilan dosyalar tutulmalidir. Yerel deneme, yedek veya gecici dosyalar repo disinda birakilabilir.
 
 ## Surum
 
-Guncel toolbox surumu: `0.3`
+Guncel toolbox surumu: `0.4`
 
 ## Gelistirici
 

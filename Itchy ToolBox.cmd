@@ -6,8 +6,18 @@
 setlocal EnableDelayedExpansion
 chcp 65001 >nul
 title I T C H Y   T O O L B O X
-set "VERSION=0.3"
+set "VERSION=0.4"
 set "TOOLBOX_FILE=%~f0"
+set "TOOLBOX_DIR=%~dp0"
+set "DATA_DIR=%USERPROFILE%\Desktop\Itchy-Toolbox-Data"
+set "LOG_DIR=%DATA_DIR%\Logs"
+set "REPORT_DIR=%USERPROFILE%\Desktop"
+set "CONFIG_FILE=%DATA_DIR%\config.ini"
+set "LAST_INSTALL_LOG=%DATA_DIR%\last-install-log.csv"
+set "LAST_FAILED_FILE=%DATA_DIR%\last-failed-apps.txt"
+if not exist "%DATA_DIR%" mkdir "%DATA_DIR%" >nul 2>&1
+if not exist "%LOG_DIR%" mkdir "%LOG_DIR%" >nul 2>&1
+if exist "%CONFIG_FILE%" call :LOAD_CONFIG
 mode con cols=120 lines=45
 
 :: ANSI renk destegi (Win10+)
@@ -21,6 +31,7 @@ set "YLW=%ESC%[93m"
 set "MAG=%ESC%[95m"
 set "CYN=%ESC%[96m"
 set "GRY=%ESC%[90m"
+call :APPLY_THEME
 
 :: Sistem bilgisi
 set "MY_IP=Bilinmiyor"
@@ -30,7 +41,7 @@ for /f "tokens=2 delims=:" %%i in ('ipconfig 2^>nul ^| findstr /i "IPv4" 2^>nul'
 for /f "tokens=* delims= " %%i in ("!MY_IP!") do set "MY_IP=%%i"
 set "MY_PC=%COMPUTERNAME%"
 
-call :SPLASH
+if not "%SKIP_SPLASH%"=="1" call :SPLASH
 
 :: ============================================================
 :: ANA MENU
@@ -66,6 +77,12 @@ echo   %CYN%[11]%RST% Yedekleme / Geri Yukleme
 echo   %CYN%[12]%RST% Sistem Araclari
 echo   %CYN%[13]%RST% Ag Onarim / Rapor
 echo   %CYN%[14]%RST% Yonetici Olarak Yeniden Baslat
+echo   %CYN%[15]%RST% On Kontrol
+echo   %CYN%[16]%RST% Kurulum Sonrasi Kontrol
+echo   %CYN%[17]%RST% Surucu Yardimci
+echo   %CYN%[18]%RST% Windows Ayarlari
+echo   %CYN%[19]%RST% Bakim Profilleri
+echo   %CYN%[20]%RST% Log / Ayar / Guncelleme
 echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo   %DIM%[sayi] sec   [q] cikis%RST%
@@ -89,6 +106,12 @@ if "!choice!"=="11" goto :BACKUP_RECOVERY_MENU
 if "!choice!"=="12" goto :SYSTEM_TOOLS_MENU
 if "!choice!"=="13" goto :NETWORK_REPORT_MENU
 if "!choice!"=="14" call :RELAUNCH_ADMIN
+if "!choice!"=="15" goto :PRECHECK_MENU
+if "!choice!"=="16" goto :POST_INSTALL_MENU
+if "!choice!"=="17" goto :DRIVER_HELPER_MENU
+if "!choice!"=="18" goto :WINDOWS_SETTINGS_MENU
+if "!choice!"=="19" goto :MAINTENANCE_PROFILES
+if "!choice!"=="20" goto :LOG_SETTINGS_MENU
 goto :MAIN_MENU
 
 
@@ -119,7 +142,7 @@ echo.
 call :PRINT_APP_CATEGORIES
 echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
-echo   %DIM%Coklu secim: 1,15,16   [a] tumu   [x] geri   [q] cikis%RST%
+echo   %DIM%Coklu secim: 1,15,16   [a] tumu   [r] basarisizlari tekrar dene   [h] HTML rapor   [x] geri   [q] cikis%RST%
 echo.
 
 set "choice="
@@ -127,6 +150,14 @@ set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 
 if /i "!choice!"=="q" goto :EXIT
 if /i "!choice!"=="x" goto :MAIN_MENU
+if /i "!choice!"=="r" (
+    call :RETRY_FAILED_APPS
+    goto :APP_INSTALLER
+)
+if /i "!choice!"=="h" (
+    call :CREATE_INSTALL_REPORT
+    goto :APP_INSTALLER
+)
 if /i "!choice!"=="" goto :APP_INSTALLER
 if /i "!choice!"=="a" (
     call :INSTALL_ALL
@@ -464,6 +495,7 @@ goto :STANDARD_INSTALLER
 echo.
 echo   %YLW%-- %~1 profili kuruluyor...%RST%
 echo.
+call :START_INSTALL_SESSION "%~1"
 set "ok_count=0"
 set "fail_count=0"
 for %%i in (%~2) do (
@@ -473,6 +505,7 @@ echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo   %GRN%[+] Basarili: !ok_count!%RST%   %RED%[-] Basarisiz: !fail_count!%RST%
 echo.
+call :FINISH_INSTALL_SESSION
 pause
 exit /b
 
@@ -514,6 +547,7 @@ set "raw=!raw:,= !"
 echo.
 echo   %YLW%-- Secili uygulamalar kuruluyor...%RST%
 echo.
+call :START_INSTALL_SESSION "Secili kurulum"
 set "ok_count=0"
 set "fail_count=0"
 for %%n in (!raw!) do (
@@ -524,26 +558,128 @@ echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo   %GRN%[+] Basarili: !ok_count!%RST%   %RED%[-] Basarisiz: !fail_count!%RST%
 echo.
+call :FINISH_INSTALL_SESSION
+pause
+exit /b
+
+
+:START_INSTALL_SESSION
+set "INSTALL_SESSION=%~1"
+set "INSTALL_STARTED=%DATE% %TIME%"
+set "INSTALL_LOG_FILE=%LAST_INSTALL_LOG%"
+set "FAILED_FILE=%LAST_FAILED_FILE%"
+echo Tarih,No,Uygulama,Paket,Sonuc,Not>"!INSTALL_LOG_FILE!"
+break > "!FAILED_FILE!"
+call :LOG_EVENT "INSTALL" "Basladi: !INSTALL_SESSION!"
+exit /b
+
+
+:LOG_INSTALL_ROW
+set "log_result=%~1"
+set "log_note=%~2"
+set "log_name=!name:,= !"
+set "log_pkg=!pkg:,= !"
+if "!log_name!"=="" set "log_name=Gecersiz"
+if "!log_pkg!"=="" set "log_pkg=-"
+echo "%DATE% %TIME%","!idx!","!log_name!","!log_pkg!","!log_result!","!log_note!">>"!INSTALL_LOG_FILE!"
+exit /b
+
+
+:INSTALL_OK
+set /a ok_count+=1
+set "LAST_INSTALL_RESULT=OK"
+call :LOG_INSTALL_ROW "OK" "%~1"
+call :LOG_EVENT "APP" "OK [!idx!] !name!"
+exit /b
+
+
+:INSTALL_FAIL
+set /a fail_count+=1
+set "LAST_INSTALL_RESULT=FAIL"
+call :LOG_INSTALL_ROW "FAIL" "%~1"
+if not "!idx!"=="" echo !idx!>>"!FAILED_FILE!"
+call :LOG_EVENT "APP" "FAIL [!idx!] !name!"
+exit /b
+
+
+:FINISH_INSTALL_SESSION
+call :LOG_EVENT "INSTALL" "Bitti: !INSTALL_SESSION! OK=!ok_count! FAIL=!fail_count!"
+echo   %DIM%Log: !INSTALL_LOG_FILE!%RST%
+if !fail_count! gtr 0 echo   %YLW%[~] Basarisizlar icin Uygulama Yukleyici'de [r] secenegini kullanabilirsiniz.%RST%
+exit /b
+
+
+:RETRY_FAILED_APPS
+call :LOAD_APPS
+if not exist "%LAST_FAILED_FILE%" (
+    echo.
+    echo   %YLW%[~] Tekrar denenecek basarisiz uygulama kaydi yok.%RST%
+    pause
+    exit /b
+)
+set "retry_list="
+for /f "usebackq tokens=*" %%i in ("%LAST_FAILED_FILE%") do (
+    if not "%%i"=="" set "retry_list=!retry_list! %%i"
+)
+if "!retry_list!"=="" (
+    echo.
+    echo   %YLW%[~] Tekrar denenecek basarisiz uygulama kaydi yok.%RST%
+    pause
+    exit /b
+)
+echo.
+echo   %YLW%-- Basarisiz uygulamalar tekrar deneniyor...%RST%
+call :START_INSTALL_SESSION "Basarisizlari tekrar dene"
+set "ok_count=0"
+set "fail_count=0"
+for %%i in (!retry_list!) do call :INSTALL_ONE %%i
+echo.
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo   %GRN%[+] Basarili: !ok_count!%RST%   %RED%[-] Basarisiz: !fail_count!%RST%
+echo.
+call :FINISH_INSTALL_SESSION
+pause
+exit /b
+
+
+:CREATE_INSTALL_REPORT
+set "report_file=%REPORT_DIR%\Itchy-Install-Report.html"
+set "tool_script=%TOOLBOX_DIR%Itchy.Tools.ps1"
+echo.
+echo   %YLW%-- HTML kurulum raporu olusturuluyor...%RST%
+if not exist "!tool_script!" (
+    echo   %RED%[-] Yardimci script bulunamadi: !tool_script!%RST%
+    pause
+    exit /b
+)
+powershell -NoProfile -ExecutionPolicy Bypass -File "!tool_script!" -Action InstallReport -InputPath "%LAST_INSTALL_LOG%" -OutputPath "!report_file!"
+if exist "!report_file!" (
+    echo   %GRN%[+] Kaydedildi: !report_file!%RST%
+) else (
+    echo   %RED%[-] Kurulum raporu olusturulamadi.%RST%
+)
 pause
 exit /b
 
 
 :INSTALL_ONE
 set "idx=%~1"
+set "pkg="
+set "name="
 if "!idx!"=="" exit /b
 for /f "delims=0123456789" %%a in ("!idx!") do (
     echo   %RED%[-] Gecersiz numara: !idx!%RST%
-    set /a fail_count+=1
+    call :INSTALL_FAIL "Basarisiz"
     exit /b
 )
 if !idx! lss 1 (
     echo   %RED%[-] Gecersiz numara: !idx!%RST%
-    set /a fail_count+=1
+    call :INSTALL_FAIL "Basarisiz"
     exit /b
 )
 if !idx! gtr %APP_COUNT% (
     echo   %RED%[-] Gecersiz numara: !idx!%RST%
-    set /a fail_count+=1
+    call :INSTALL_FAIL "Basarisiz"
     exit /b
 )
 
@@ -607,13 +743,13 @@ if "!pkg!"=="CUSTOM_ITCHY_BACKUP" (
 if "!pkg!"=="CUSTOM_MEMORYDIAG" (
     start "" mdsched.exe
     echo     %GRN%[+] Windows Bellek Tanilama acildi%RST%
-    set /a ok_count+=1
+    call :INSTALL_OK "Basarili"
     exit /b
 )
 
 if "!pkg!"=="CUSTOM" (
     echo     %YLW%[~] Ozel kurulum henuz tanimlanmamis, atlandi.%RST%
-    set /a fail_count+=1
+    call :INSTALL_FAIL "Basarisiz"
     exit /b
 )
 
@@ -622,10 +758,10 @@ if "!pkg:~0,8!"=="MSSTORE:" (
     winget install --id "!store_id!" -e --source msstore --accept-source-agreements --accept-package-agreements --silent
     if !errorlevel! == 0 (
         echo     %GRN%[+] Kuruldu%RST%
-        set /a ok_count+=1
+        call :INSTALL_OK "Basarili"
     ) else (
         echo     %RED%[-] Basarisiz%RST%
-        set /a fail_count+=1
+        call :INSTALL_FAIL "Basarisiz"
     )
     exit /b
 )
@@ -633,17 +769,17 @@ if "!pkg:~0,8!"=="MSSTORE:" (
 winget install --id "!pkg!" -e --source winget --accept-source-agreements --accept-package-agreements --silent
 if !errorlevel! == 0 (
     echo     %GRN%[+] Kuruldu%RST%
-    set /a ok_count+=1
+    call :INSTALL_OK "Basarili"
 ) else (
     echo     %YLW%[~] Ilk deneme basarisiz. winget kaynagi guncellenip tekrar deneniyor...%RST%
     winget source update --name winget
     winget install --id "!pkg!" -e --source winget --accept-source-agreements --accept-package-agreements --silent
     if !errorlevel! == 0 (
         echo     %GRN%[+] Kuruldu%RST%
-        set /a ok_count+=1
+        call :INSTALL_OK "Basarili"
     ) else (
         echo     %RED%[-] Basarisiz%RST%
-        set /a fail_count+=1
+        call :INSTALL_FAIL "Basarisiz"
     )
 )
 exit /b
@@ -657,10 +793,10 @@ echo     %YLW%[~] !dl_name! resmi kaynaktan indiriliyor...%RST%
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$dir=Join-Path $env:TEMP 'ItchyDownloads'; New-Item -ItemType Directory -Force -Path $dir ^| Out-Null; $out=Join-Path $dir '!dl_file!'; try { Invoke-WebRequest -Uri '!dl_url!' -OutFile $out -UseBasicParsing; Start-Process -FilePath $out; exit 0 } catch { Write-Host $_.Exception.Message; exit 1 }"
 if !errorlevel! == 0 (
     echo     %GRN%[+] Indirildi ve baslatildi%RST%
-    set /a ok_count+=1
+    call :INSTALL_OK "Basarili"
 ) else (
     echo     %RED%[-] Indirme/baslatma basarisiz%RST%
-    set /a fail_count+=1
+    call :INSTALL_FAIL "Basarisiz"
 )
 exit /b
 
@@ -674,10 +810,10 @@ echo     %YLW%[~] !gh_name! GitHub latest release uzerinden indiriliyor...%RST%
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$dir=Join-Path $env:TEMP 'ItchyDownloads'; New-Item -ItemType Directory -Force -Path $dir ^| Out-Null; try { $api='https://api.github.com/repos/!gh_owner!/!gh_repo!/releases/latest'; $release=Invoke-RestMethod -Headers @{'User-Agent'='ItchyToolbox'} -Uri $api; $assets=@($release.assets); $asset=$assets ^| Where-Object { $_.name -match '(?i)(setup|install).*\.(exe|msi)$' } ^| Select-Object -First 1; if(-not $asset){ $asset=$assets ^| Where-Object { $_.name -match '(?i)\.(exe|msi)$' -and $_.name -notmatch '(?i)portable' } ^| Select-Object -First 1 }; if(-not $asset){ throw 'Release icinde setup exe/msi bulunamadi' }; $ext=[IO.Path]::GetExtension($asset.name); $out=Join-Path $dir ('!gh_file!'+$ext); Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $out -UseBasicParsing; Start-Process -FilePath $out; exit 0 } catch { Write-Host $_.Exception.Message; exit 1 }"
 if !errorlevel! == 0 (
     echo     %GRN%[+] Indirildi ve baslatildi%RST%
-    set /a ok_count+=1
+    call :INSTALL_OK "Basarili"
 ) else (
     echo     %RED%[-] !gh_name! indirilemedi%RST%
-    set /a fail_count+=1
+    call :INSTALL_FAIL "Basarisiz"
 )
 exit /b
 
@@ -696,24 +832,24 @@ if !errorlevel! == 0 (
         "!spotify_installer!" /extract "%ProgramFiles%\Spotify"
         if !errorlevel! == 0 (
             echo     %GRN%[+] Spotify makine kurulumu tamamlandi%RST%
-            set /a ok_count+=1
+            call :INSTALL_OK "Basarili"
         ) else (
             echo     %RED%[-] Spotify makine kurulumu basarisiz%RST%
-            set /a fail_count+=1
+            call :INSTALL_FAIL "Basarisiz"
         )
     ) else (
         echo     %RED%[-] Spotify indirilemedi. Programi yonetici olmadan acip tekrar deneyin.%RST%
-        set /a fail_count+=1
+        call :INSTALL_FAIL "Basarisiz"
     )
     exit /b
 )
 winget install --id Spotify.Spotify -e --source winget --accept-source-agreements --accept-package-agreements --silent
 if !errorlevel! == 0 (
     echo     %GRN%[+] Kuruldu%RST%
-    set /a ok_count+=1
+    call :INSTALL_OK "Basarili"
 ) else (
     echo     %RED%[-] Basarisiz%RST%
-    set /a fail_count+=1
+    call :INSTALL_FAIL "Basarisiz"
 )
 exit /b
 
@@ -725,10 +861,10 @@ echo     %YLW%[~] DMDE resmi siteden indiriliyor...%RST%
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$dir=Split-Path -Parent '!dmde_target!'; New-Item -ItemType Directory -Force -Path $dir ^| Out-Null; try { $page=Invoke-WebRequest -Uri 'https://dmde.com/download.html' -UseBasicParsing; $href=($page.Links ^| Where-Object { $_.href -match 'win64-gui\.zip$' } ^| Select-Object -First 1).href; if(-not $href){ $match=[regex]::Match($page.Content,'download/[^'' >]+win64-gui\.zip'); if($match.Success){ $href=$match.Value } }; if(-not $href){ throw 'DMDE indirme linki bulunamadi' }; if($href -notmatch '^https?://'){ $href='https://dmde.com/'+$href.TrimStart('/') }; Invoke-WebRequest -Uri $href -OutFile '!dmde_target!' -UseBasicParsing; New-Item -ItemType Directory -Force -Path '!dmde_dir!' ^| Out-Null; Expand-Archive -Path '!dmde_target!' -DestinationPath '!dmde_dir!' -Force; $exe=Get-ChildItem '!dmde_dir!' -Recurse -Filter 'dmde.exe' ^| Select-Object -First 1; if($exe){ Start-Process -FilePath $exe.FullName; exit 0 } else { exit 1 } } catch { Write-Host $_.Exception.Message; exit 1 }"
 if !errorlevel! == 0 (
     echo     %GRN%[+] DMDE indirildi, cikarildi ve baslatildi%RST%
-    set /a ok_count+=1
+    call :INSTALL_OK "Basarili"
 ) else (
     echo     %RED%[-] DMDE kurulumu basarisiz%RST%
-    set /a fail_count+=1
+    call :INSTALL_FAIL "Basarisiz"
 )
 exit /b
 
@@ -739,10 +875,10 @@ echo     %YLW%[~] RustDesk GitHub uzerinden indiriliyor...%RST%
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$dir=Split-Path -Parent '!rustdesk_target!'; New-Item -ItemType Directory -Force -Path $dir ^| Out-Null; try { $release=Invoke-RestMethod -Uri 'https://api.github.com/repos/rustdesk/rustdesk/releases/latest'; $asset=$release.assets ^| Where-Object { $_.name -match 'x86_64.*\.exe$' -and $_.name -notmatch 'portable' } ^| Select-Object -First 1; if(-not $asset){ throw 'RustDesk indirme dosyasi bulunamadi' }; Invoke-WebRequest -Uri $asset.browser_download_url -OutFile '!rustdesk_target!' -UseBasicParsing; Start-Process -FilePath '!rustdesk_target!'; exit 0 } catch { Write-Host $_.Exception.Message; exit 1 }"
 if !errorlevel! == 0 (
     echo     %GRN%[+] Indirildi ve baslatildi%RST%
-    set /a ok_count+=1
+    call :INSTALL_OK "Basarili"
 ) else (
     echo     %RED%[-] RustDesk indirilemedi%RST%
-    set /a fail_count+=1
+    call :INSTALL_FAIL "Basarisiz"
 )
 exit /b
 
@@ -754,12 +890,12 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "try { Invoke-WebRequest 
 if !errorlevel! neq 0 (
     powershell -NoProfile -ExecutionPolicy Bypass -Command "try { Invoke-WebRequest -Uri 'https://www.alpemix.com/tr/alpemix-indir-Windows' -OutFile $env:TEMP\Alpemix.html -UseBasicParsing; exit 0 } catch { exit 1 }"
     echo     %RED%[-] Alpemix otomatik indirilemedi. Resmi indirme sayfasi: https://www.alpemix.com/tr/alpemix-indir-Windows%RST%
-    set /a fail_count+=1
+    call :INSTALL_FAIL "Basarisiz"
     exit /b
 )
 start "" "!alpemix_target!"
 echo     %GRN%[+] Alpemix indirildi ve baslatildi%RST%
-set /a ok_count+=1
+call :INSTALL_OK "Basarili"
 exit /b
 
 
@@ -767,6 +903,7 @@ exit /b
 echo.
 echo   %YLW%-- TUM uygulamalar kuruluyor...%RST%
 echo.
+call :START_INSTALL_SESSION "Tum uygulamalar"
 set "ok_count=0"
 set "fail_count=0"
 for /l %%i in (1,1,%APP_COUNT%) do (
@@ -776,6 +913,7 @@ echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo   %GRN%[+] Basarili: !ok_count!%RST%   %RED%[-] Basarisiz: !fail_count!%RST%
 echo.
+call :FINISH_INSTALL_SESSION
 pause
 exit /b
 
@@ -1404,7 +1542,9 @@ if "!choice!"=="8" (
     call :LOAD_APPS
     set "ok_count=0"
     set "fail_count=0"
+    call :START_INSTALL_SESSION "Sysinternals Suite"
     call :INSTALL_ONE 63
+    call :FINISH_INSTALL_SESSION
     pause
 )
 goto :SYSTEM_TOOLS_MENU
@@ -1495,6 +1635,248 @@ echo.
 echo   %YLW%-- Yonetici izni isteniyor...%RST%
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath $env:ComSpec -ArgumentList '/c','""!TOOLBOX_FILE!""' -Verb RunAs"
 exit /b
+
+
+:: ============================================================
+:: ON KONTROL
+:: ============================================================
+:PRECHECK_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- On Kontrol%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Ekrana hizli on kontrol yazdir
+echo   %CYN%[2]%RST% HTML on kontrol raporu olustur
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" call :PRECHECK_CONSOLE
+if "!choice!"=="2" call :PRECHECK_HTML
+goto :PRECHECK_MENU
+
+
+:PRECHECK_CONSOLE
+echo.
+echo   %YLW%-- Cihaz on kontrolu%RST%
+net session >nul 2>&1 && echo   Yonetici: %GRN%Evet%RST% || echo   Yonetici: %YLW%Hayir%RST%
+ping -n 1 1.1.1.1 >nul 2>&1 && echo   Internet: %GRN%Var%RST% || echo   Internet: %RED%Yok / test basarisiz%RST%
+where winget >nul 2>&1 && echo   Winget: %GRN%Var%RST% || echo   Winget: %RED%Yok%RST%
+powershell -NoProfile -Command "$os=Get-CimInstance Win32_OperatingSystem; $cs=Get-CimInstance Win32_ComputerSystem; $d=Get-CimInstance Win32_LogicalDisk ^| Where-Object { $_.DeviceID -eq $env:SystemDrive }; 'Windows: '+$os.Caption+' '+$os.OSArchitecture+' Build '+$os.BuildNumber; 'RAM: '+('{0:N1} GB' -f ($cs.TotalPhysicalMemory/1GB)); 'Bos disk: '+('{0:N1} GB' -f ($d.FreeSpace/1GB)); if(Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending'){'Yeniden baslatma: Bekliyor'}else{'Yeniden baslatma: Yok'}"
+echo.
+pause
+exit /b
+
+
+:PRECHECK_HTML
+set "tool_script=%TOOLBOX_DIR%Itchy.Tools.ps1"
+set "report_file=%REPORT_DIR%\Itchy-Precheck-Report.html"
+echo.
+echo   %YLW%-- HTML on kontrol raporu olusturuluyor...%RST%
+powershell -NoProfile -ExecutionPolicy Bypass -File "!tool_script!" -Action Precheck -OutputPath "!report_file!"
+if exist "!report_file!" echo   %GRN%[+] Kaydedildi: !report_file!%RST%
+pause
+exit /b
+
+
+:: ============================================================
+:: KURULUM SONRASI KONTROL
+:: ============================================================
+:POST_INSTALL_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Kurulum Sonrasi Kontrol%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Son kurulum raporu olustur
+echo   %CYN%[2]%RST% Basarisiz kurulumlari tekrar dene
+echo   %CYN%[3]%RST% Winget kurulu uygulamalari listele
+echo   %CYN%[4]%RST% Windows Update ayarlarini ac
+echo   %CYN%[5]%RST% Aygit Yoneticisi ac
+echo   %CYN%[6]%RST% Sistem HTML raporu olustur
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" call :CREATE_INSTALL_REPORT
+if "!choice!"=="2" call :RETRY_FAILED_APPS
+if "!choice!"=="3" (
+    winget list
+    pause
+)
+if "!choice!"=="4" start "" ms-settings:windowsupdate
+if "!choice!"=="5" start "" devmgmt.msc
+if "!choice!"=="6" call :CREATE_SYSTEM_REPORT
+goto :POST_INSTALL_MENU
+
+
+:: ============================================================
+:: SURUCU YARDIMCI
+:: ============================================================
+:DRIVER_HELPER_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Surucu Yardimci%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Aygit Yoneticisi
+echo   %CYN%[2]%RST% Windows Update
+echo   %CYN%[3]%RST% NVIDIA surucu sayfasi
+echo   %CYN%[4]%RST% AMD surucu sayfasi
+echo   %CYN%[5]%RST% Intel surucu sayfasi
+echo   %CYN%[6]%RST% Anakart/CPU bilgisi raporu
+echo   %CYN%[7]%RST% DDU kur
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" start "" devmgmt.msc
+if "!choice!"=="2" start "" ms-settings:windowsupdate
+if "!choice!"=="3" start "" "https://www.nvidia.com/Download/index.aspx"
+if "!choice!"=="4" start "" "https://www.amd.com/en/support/download/drivers.html"
+if "!choice!"=="5" start "" "https://www.intel.com/content/www/us/en/download-center/home.html"
+if "!choice!"=="6" call :CREATE_SYSTEM_REPORT
+if "!choice!"=="7" (call :LOAD_APPS & set "ok_count=0" & set "fail_count=0" & call :START_INSTALL_SESSION "DDU" & call :INSTALL_ONE 73 & call :FINISH_INSTALL_SESSION & pause)
+goto :DRIVER_HELPER_MENU
+
+
+:: ============================================================
+:: WINDOWS AYARLARI
+:: ============================================================
+:WINDOWS_SETTINGS_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Windows Ayarlari%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Aktivasyon
+echo   %CYN%[2]%RST% Windows Update
+echo   %CYN%[3]%RST% Varsayilan uygulamalar
+echo   %CYN%[4]%RST% Ag ayarlari
+echo   %CYN%[5]%RST% Depolama
+echo   %CYN%[6]%RST% Baslangic uygulamalari
+echo   %CYN%[7]%RST% Guc secenekleri
+echo   %CYN%[8]%RST% Uzak masaustu
+echo   %CYN%[9]%RST% Bluetooth
+echo   %CYN%[10]%RST% Yazicilar
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" start "" ms-settings:activation
+if "!choice!"=="2" start "" ms-settings:windowsupdate
+if "!choice!"=="3" start "" ms-settings:defaultapps
+if "!choice!"=="4" start "" ms-settings:network
+if "!choice!"=="5" start "" ms-settings:storagesense
+if "!choice!"=="6" start "" ms-settings:startupapps
+if "!choice!"=="7" start "" powercfg.cpl
+if "!choice!"=="8" start "" ms-settings:remotedesktop
+if "!choice!"=="9" start "" ms-settings:bluetooth
+if "!choice!"=="10" start "" ms-settings:printers
+goto :WINDOWS_SETTINGS_MENU
+
+
+:: ============================================================
+:: BAKIM PROFILLERI
+:: ============================================================
+:MAINTENANCE_PROFILES
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Bakim Profilleri%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Hafif bakim
+echo   %CYN%[2]%RST% Derin bakim
+echo   %CYN%[3]%RST% Ag bakim
+echo   %CYN%[4]%RST% Cihaz teslim raporu
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" call :MAINT_LIGHT
+if "!choice!"=="2" call :MAINT_DEEP
+if "!choice!"=="3" call :NETWORK_REPAIR
+if "!choice!"=="4" call :MAINT_DELIVERY
+goto :MAINTENANCE_PROFILES
+
+
+:MAINT_LIGHT
+echo.
+echo   %YLW%-- Hafif bakim basladi...%RST%
+ipconfig /flushdns
+powershell -NoProfile -Command "Remove-Item $env:TEMP\* -Recurse -Force -ErrorAction SilentlyContinue"
+call :CREATE_INSTALL_REPORT
+exit /b
+
+
+:MAINT_DEEP
+call :CREATE_RESTORE_POINT
+call :REPAIR_DISM_SFC
+call :CREATE_SYSTEM_REPORT
+exit /b
+
+
+:MAINT_DELIVERY
+call :PRECHECK_HTML
+call :CREATE_SYSTEM_REPORT
+call :CREATE_NETWORK_REPORT
+call :CREATE_INSTALL_REPORT
+exit /b
+
+
+:: ============================================================
+:: LOG / AYAR / GUNCELLEME
+:: ============================================================
+:LOG_SETTINGS_MENU
+cls
+call :BANNER
+echo.
+echo   %YLW%%BLD%-- Log / Ayar / Guncelleme%RST%
+echo   %GRY%-----------------------------------------------------------------------%RST%
+echo.
+echo   %CYN%[1]%RST% Son kurulum logunu goster
+echo   %CYN%[2]%RST% Log klasorunu ac
+echo   %CYN%[3]%RST% Kurulum HTML raporu olustur
+echo   %CYN%[4]%RST% Rapor klasoru ayarla
+echo   %CYN%[5]%RST% Tema ayarla
+echo   %CYN%[6]%RST% Splash ac/kapat
+echo   %CYN%[7]%RST% GitHub'dan toolbox guncelle
+echo.
+echo   %DIM%[x] geri   [q] cikis%RST%
+echo.
+set "choice="
+set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
+if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="x" goto :MAIN_MENU
+if "!choice!"=="1" type "%LAST_INSTALL_LOG%" & pause
+if "!choice!"=="2" start "" "%DATA_DIR%"
+if "!choice!"=="3" call :CREATE_INSTALL_REPORT
+if "!choice!"=="4" call :SET_REPORT_DIR
+if "!choice!"=="5" call :SET_THEME
+if "!choice!"=="6" call :TOGGLE_SPLASH
+if "!choice!"=="7" call :SELF_UPDATE
+goto :LOG_SETTINGS_MENU
 
 
 :: ============================================================
@@ -1593,6 +1975,107 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "$dir=Join-Path $env:TEMP
 echo.
 pause
 goto :MAIN_MENU
+
+
+:: ============================================================
+:: CONFIG / LOG YARDIMCILARI
+:: ============================================================
+:LOAD_CONFIG
+for /f "usebackq tokens=1,* delims==" %%a in ("%CONFIG_FILE%") do (
+    if /i "%%a"=="REPORT_DIR" set "REPORT_DIR=%%b"
+    if /i "%%a"=="SKIP_SPLASH" set "SKIP_SPLASH=%%b"
+    if /i "%%a"=="THEME" set "THEME=%%b"
+)
+exit /b
+
+
+:SAVE_CONFIG
+if not exist "%DATA_DIR%" mkdir "%DATA_DIR%" >nul 2>&1
+(
+    echo REPORT_DIR=%REPORT_DIR%
+    echo SKIP_SPLASH=%SKIP_SPLASH%
+    echo THEME=%THEME%
+) > "%CONFIG_FILE%"
+exit /b
+
+
+:APPLY_THEME
+if /i "%THEME%"=="blue" (
+    set "CYN=%ESC%[94m"
+    set "YLW=%ESC%[96m"
+)
+if /i "%THEME%"=="green" (
+    set "CYN=%ESC%[92m"
+    set "YLW=%ESC%[93m"
+)
+if /i "%THEME%"=="classic" (
+    set "CYN=%ESC%[96m"
+    set "YLW=%ESC%[93m"
+)
+exit /b
+
+
+:LOG_EVENT
+if not exist "%LOG_DIR%" mkdir "%LOG_DIR%" >nul 2>&1
+echo [%DATE% %TIME%] %~1 - %~2>>"%LOG_DIR%\Itchy-Toolbox.log"
+exit /b
+
+
+:SET_REPORT_DIR
+echo.
+echo   Mevcut rapor klasoru: %REPORT_DIR%
+set "new_report_dir="
+set /p "new_report_dir=  Yeni rapor klasoru: "
+if not "!new_report_dir!"=="" (
+    set "REPORT_DIR=!new_report_dir!"
+    if not exist "!REPORT_DIR!" mkdir "!REPORT_DIR!" >nul 2>&1
+    call :SAVE_CONFIG
+    echo   %GRN%[+] Kaydedildi.%RST%
+)
+pause
+exit /b
+
+
+:SET_THEME
+echo.
+echo   %CYN%[1]%RST% classic
+echo   %CYN%[2]%RST% green
+echo   %CYN%[3]%RST% blue
+echo.
+set "theme_choice="
+set /p "theme_choice=  Tema: "
+if "!theme_choice!"=="1" set "THEME=classic"
+if "!theme_choice!"=="2" set "THEME=green"
+if "!theme_choice!"=="3" set "THEME=blue"
+call :SAVE_CONFIG
+call :APPLY_THEME
+echo   %GRN%[+] Tema kaydedildi.%RST%
+pause
+exit /b
+
+
+:TOGGLE_SPLASH
+if "%SKIP_SPLASH%"=="1" (
+    set "SKIP_SPLASH=0"
+    echo   %GRN%[+] Splash acildi.%RST%
+) else (
+    set "SKIP_SPLASH=1"
+    echo   %GRN%[+] Splash kapatildi.%RST%
+)
+call :SAVE_CONFIG
+pause
+exit /b
+
+
+:SELF_UPDATE
+set "tool_script=%TOOLBOX_DIR%Itchy.Tools.ps1"
+echo.
+echo   %YLW%-- GitHub main uzerinden toolbox guncelleniyor...%RST%
+powershell -NoProfile -ExecutionPolicy Bypass -File "!tool_script!" -Action UpdateSelf -ToolboxPath "%TOOLBOX_FILE%"
+echo.
+echo   %YLW%[~] Guncelleme sonrasi programi yeniden acmaniz onerilir.%RST%
+pause
+exit /b
 
 
 :: ============================================================
