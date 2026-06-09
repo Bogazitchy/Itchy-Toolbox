@@ -8,6 +8,14 @@ GitHub: [Bogazitchy/Itchy-Toolbox](https://github.com/Bogazitchy/Itchy-Toolbox)
 
 Guncel surum: `0.5`
 
+## Indirme
+
+En guncel surum icin GitHub Releases bolumundeki `Itchy-Toolbox-v0.5` paketini indirin:
+
+[Latest Release](https://github.com/Bogazitchy/Itchy-Toolbox/releases/latest)
+
+Kaynak kod ZIP'i yerine release paketini indirmek daha pratiktir; paket icinde ana CMD dosyasi, rapor scriptleri ve README birlikte gelir.
+
 ## Ozellikler
 
 ### Sadelestirilmis Ana Menu
