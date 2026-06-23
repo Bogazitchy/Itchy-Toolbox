@@ -6,7 +6,7 @@
 setlocal EnableDelayedExpansion
 chcp 65001 >nul
 title I T C H Y   T O O L B O X
-set "VERSION=0.5"
+set "VERSION=0.6"
 set "TOOLBOX_FILE=%~f0"
 set "TOOLBOX_DIR=%~dp0"
 set "DATA_DIR=%USERPROFILE%\Desktop\Itchy-Toolbox-Data"
@@ -56,15 +56,6 @@ echo.
 echo   %YLW%%BLD%-- Ana Menu%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo.
-
-net session >nul 2>&1
-if !errorlevel! == 0 (
-    echo   Durum: %GRN%[+] Yonetici%RST%
-) else (
-    echo   Durum: %YLW%[~] Standart kullanici ^(bazi islemler calismaz^)%RST%
-)
-echo.
-
 echo   %CYN%[1]%RST% Uygulama Yukleyici
 echo   %CYN%[2]%RST% Kurulum Profilleri
 echo   %CYN%[3]%RST% Windows Yonetimi
@@ -75,14 +66,35 @@ echo   %CYN%[7]%RST% Lisans / Bilgi
 echo   %CYN%[8]%RST% Bakim / Ayar / Guncelleme
 echo   %CYN%[9]%RST% Yonetici Olarak Yeniden Baslat
 echo.
+echo   %DIM%PC: %YLW%!MY_PC!%DIM%   IP: %YLW%!MY_IP!%DIM%   Tema: %YLW%!THEME!%RST%
+echo.
+echo   %GRY%+----------------------------------------+----------------------------------------+%RST%
+echo   %GRY%^|%RST% %YLW%Hizli Islemler%RST%                          %GRY%^|%RST% %YLW%Servis Akisi%RST%                            %GRY%^|%RST%
+echo   %GRY%+----------------------------------------+----------------------------------------+%RST%
+echo   %GRY%^|%RST% %CYN%[p]%RST% On kontrol HTML raporu              %GRY%^|%RST% %CYN%[s]%RST% Standart kurulum seti              %GRY%^|%RST%
+echo   %GRY%^|%RST% %CYN%[r]%RST% Detayli sistem raporu               %GRY%^|%RST% %CYN%[n]%RST% Ag onarim komutlari                %GRY%^|%RST%
+echo   %GRY%^|%RST% %CYN%[u]%RST% GitHub'dan guncelle                 %GRY%^|%RST% %CYN%[w]%RST% Windows onarim menusu              %GRY%^|%RST%
+echo   %GRY%+----------------------------------------+----------------------------------------+%RST%
+echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
-echo   %DIM%[sayi] sec   [q] cikis%RST%
+echo   %DIM%[sayi] menu sec   [p/r/u/s/n/w] hizli islem   [q] cikis%RST%
 echo.
 
 set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 
 if /i "!choice!"=="q" goto :EXIT
+if /i "!choice!"=="p" call :PRECHECK_HTML
+if /i "!choice!"=="r" call :CREATE_SYSTEM_REPORT
+if /i "!choice!"=="u" call :SELF_UPDATE
+if /i "!choice!"=="s" (
+    call :LOAD_APPS
+    set "ok_count=0"
+    set "fail_count=0"
+    call :INSTALL_PROFILE "Standart cihaz" "40 9 46 36 69 47"
+)
+if /i "!choice!"=="n" call :NETWORK_REPAIR
+if /i "!choice!"=="w" (set "RETURN_MENU=MAIN_MENU" & goto :WINDOWS_REPAIR)
 if "!choice!"=="1" goto :APP_INSTALLER
 if "!choice!"=="2" goto :STANDARD_INSTALLER
 if "!choice!"=="3" goto :WINDOWS_MANAGEMENT_MENU
@@ -104,6 +116,7 @@ call :BANNER
 echo.
 echo   %YLW%%BLD%-- Windows Yonetimi%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
+echo   %DIM%Windows onarim, hizmet, ozellik, ayar ve surucu kisayollari burada toplanir.%RST%
 echo.
 echo   %CYN%[1]%RST% Windows Onarim
 echo   %CYN%[2]%RST% Hizmet Yonetimi
@@ -138,6 +151,7 @@ call :BANNER
 echo.
 echo   %YLW%%BLD%-- Ag Araclari%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
+echo   %DIM%Ping, DNS, WiFi bilgileri, ag reset ve ag raporu islemleri.%RST%
 echo.
 echo   %CYN%[1]%RST% Ping Olcer / DNS Degistirici
 echo   %CYN%[2]%RST% Ag onarim komutlari
@@ -173,6 +187,7 @@ call :BANNER
 echo.
 echo   %YLW%%BLD%-- Rapor / Kontrol%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
+echo   %DIM%Cihaz teslimi ve teknik servis kontrol raporlari icin hizli bolum.%RST%
 echo.
 echo   %CYN%[1]%RST% On Kontrol
 echo   %CYN%[2]%RST% Kurulum Sonrasi Kontrol
@@ -205,6 +220,7 @@ call :BANNER
 echo.
 echo   %YLW%%BLD%-- Lisans / Bilgi%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
+echo   %DIM%Windows/Office lisans, sistem ozeti ve kayitli WiFi bilgileri.%RST%
 echo.
 echo   %CYN%[1]%RST% Lisans Yonetimi
 echo   %CYN%[2]%RST% Sistem Hakkinda
@@ -233,6 +249,7 @@ call :BANNER
 echo.
 echo   %YLW%%BLD%-- Bakim / Ayar / Guncelleme%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
+echo   %DIM%Bakim profilleri, tema, log, rapor klasoru ve self-update ayarlari.%RST%
 echo.
 echo   %CYN%[1]%RST% Bakim Profilleri
 echo   %CYN%[2]%RST% Log / Ayar / Guncelleme
@@ -276,6 +293,7 @@ echo.
 echo   %GRY%Ana Menu -- Uygulama Yukleyici%RST%
 echo   %YLW%%BLD%-- Uygulama Yukleyici%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
+echo   %DIM%Numaralari virgulle yazarak toplu kurulum yapabilirsiniz. Ornek: 9,40,46%RST%
 echo.
 
 where winget >nul 2>&1
@@ -287,7 +305,7 @@ if !errorlevel! neq 0 (
 
 call :LOAD_APPS
 
-echo   %DIM%Kategoriler yan yana duzende listelenir. * ozel kurulumdur.%RST%
+echo   %DIM%Kategoriler yan yana duzende listelenir. * ozel kurulumdur. Sari satirlar teknik/kurulum odaklidir.%RST%
 echo.
 call :PRINT_APP_CATEGORIES
 echo.
@@ -520,9 +538,9 @@ for /f "tokens=1,2 delims=|" %%a in ("!grid_entry!") do (
     set "grid_value=%%b"
 )
 if "!grid_type!"=="CAT" (
-    set "grid_text= v !grid_value!                                   "
+    set "grid_text= -- !grid_value! --------------------------------"
     set "grid_text=!grid_text:~0,35!"
-    set "%~3=%GRY%!grid_text!%RST%"
+    set "%~3=%YLW%!grid_text!%RST%"
     exit /b
 )
 set "grid_idx=!grid_value!"
@@ -2149,6 +2167,7 @@ exit /b
 
 
 :APPLY_THEME
+if not defined THEME set "THEME=blue"
 if /i "%THEME%"=="blue" (
     set "CYN=%ESC%[94m"
     set "YLW=%ESC%[96m"
@@ -2244,6 +2263,10 @@ echo                                      %GRY%created by: M.Mert%RST%
 echo                                      %GRY%Windows Sistem Yonetim Araci  v%VERSION%%RST%
 echo                                      %GRY%Gelistirici: Itchy%RST%
 echo.
+net session >nul 2>&1 && echo                                      %GRN%[OK]%RST% %DIM%Yonetici yetkisi%RST% || echo                                      %YLW%[~]%RST% %DIM%Standart kullanici%RST%
+where winget >nul 2>&1 && echo                                      %GRN%[OK]%RST% %DIM%Winget bulundu%RST% || echo                                      %YLW%[~]%RST% %DIM%Winget bulunamadi%RST%
+ping -n 1 1.1.1.1 >nul 2>&1 && echo                                      %GRN%[OK]%RST% %DIM%Internet baglantisi%RST% || echo                                      %YLW%[~]%RST% %DIM%Internet testi basarisiz%RST%
+echo.
 echo                                      %DIM%Yukluyor...%RST%
 ping -n 3 127.0.0.1 >nul
 exit /b
@@ -2259,7 +2282,17 @@ echo      %GRY%  !BLK!     !BLK!   !BLK!     !BLK!   !BLK!   !BLK!  %RST%  %YLW%
 echo      %GRY%!BLK!!BLK!!BLK!!BLK!!BLK!   !BLK!   !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!   !BLK!   !BLK!  %RST%  %YLW%  !BLK!   !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!!BLK!!BLK!!BLK!  !BLK!!BLK!!BLK!!BLK!!BLK! !BLK!   !BLK!%RST%
 echo                                      %GRY%created by: M.Mert%RST%
 echo      %GRY%itchy toolbox v%VERSION%    PC:%YLW% !MY_PC! %GRY%  IP:%YLW% !MY_IP! %GRY%  Tarih:%YLW% %DATE%%RST%
+call :STATUS_BAR
 echo      %GRY%----------------------------------------------------------------------------------------------------%RST%
+exit /b
+
+
+:STATUS_BAR
+set "ADMIN_STATE=Standart"
+net session >nul 2>&1 && set "ADMIN_STATE=Yonetici"
+set "WINGET_STATE=Yok"
+where winget >nul 2>&1 && set "WINGET_STATE=Var"
+echo      %GRY%Admin:%YLW% !ADMIN_STATE! %GRY%  Winget:%YLW% !WINGET_STATE! %GRY%  Rapor:%YLW% %REPORT_DIR%%RST%
 exit /b
 
 :: CIKIS

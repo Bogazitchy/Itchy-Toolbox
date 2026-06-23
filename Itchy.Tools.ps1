@@ -16,17 +16,18 @@ function New-Page {
 
     $style = @'
 <style>
-*{box-sizing:border-box}body{margin:0;background:#080b0f;color:#e8edf2;font-family:Segoe UI,Arial,sans-serif}
-main{max-width:1180px;margin:0 auto;padding:32px 24px 48px}
-header{border:1px solid #2a3540;background:#0d1218;padding:24px;margin-bottom:16px}
-.brand{font:700 13px Consolas,monospace;color:#00e676;text-transform:uppercase}
+*{box-sizing:border-box}body{margin:0;background:#070a0d;color:#e8edf2;font-family:Segoe UI,Arial,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:30px 24px 48px}
+header{border:1px solid #33424d;background:linear-gradient(135deg,#101820,#0a0f14);padding:24px;margin-bottom:16px;box-shadow:0 18px 55px rgba(0,0,0,.28)}
+.brand{font:800 13px Consolas,monospace;color:#f8e98c;text-transform:uppercase;letter-spacing:.5px}
 h1{margin:6px 0 8px;color:#fff}h2{color:#f8e98c;margin:0 0 12px}
-.subtitle{color:#b6c1cb}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
-section{border:1px solid #26323d;background:#0d1218;padding:16px;overflow:auto}
-table{width:100%;border-collapse:collapse;font-size:13px}th{color:#00e676;background:#131e27;text-align:left;white-space:nowrap}
-th,td{border-bottom:1px solid #202b34;padding:8px 9px;vertical-align:top}td{overflow-wrap:anywhere}
+.subtitle{color:#b6c1cb}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+section{min-width:0;border:1px solid #263847;background:#0d1218;padding:16px;overflow:visible}
+table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px}th{color:#69e8ff;background:#12202a;text-align:left}
+th,td{border-bottom:1px solid #202b34;padding:7px 8px;vertical-align:top;white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 .ok{color:#00e676}.warn{color:#f8e98c}.bad{color:#ff6b6b}.muted{color:#93a2b0}
 footer{color:#7f8c98;padding-top:18px;font-size:12px}
+@media(max-width:900px){main{padding:18px 12px 34px}.grid{grid-template-columns:1fr}table{font-size:11px}th,td{padding:6px}}
 </style>
 '@
     $html = ConvertTo-Html -Title $Title -Head $style -Body "<main><header><div class='brand'>Itchy Toolbox</div><h1>$Title</h1><p class='subtitle'>$Subtitle</p></header>$Body<footer>Created by: M.Mert | $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')</footer></main>"

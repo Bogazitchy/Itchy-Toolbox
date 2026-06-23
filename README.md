@@ -6,11 +6,11 @@ Program; uygulama kurulumu, Windows onarim komutlari, hizmet ve ozellik yonetimi
 
 GitHub: [Bogazitchy/Itchy-Toolbox](https://github.com/Bogazitchy/Itchy-Toolbox)
 
-Guncel surum: `0.5`
+Guncel surum: `0.6`
 
 ## Indirme
 
-En guncel surum icin GitHub Releases bolumundeki `Itchy-Toolbox-v0.5` paketini indirin:
+En guncel surum icin GitHub Releases bolumundeki `Itchy-Toolbox-v0.6` paketini indirin:
 
 [Latest Release](https://github.com/Bogazitchy/Itchy-Toolbox/releases/latest)
 
@@ -36,9 +36,13 @@ Ana menu 20 ayri giris yerine 9 ust kategoriye toparlanmistir. Eski islevler sil
 
 - Pixel tarzinda `ITCHY TOOLBOX` acilis ve ust banner
 - Gri `ITCHY`, renkli `TOOLBOX` ayrimi
+- Ana menude dashboard tipi hizli islem alani
+- Her ekranda admin, winget ve rapor klasoru durum cubugu
+- Acilista kisa admin, winget ve internet kontrolu
 - CMD uyumlu sade tablo cizgileri
 - Bozulmaya acik Unicode kutu cizgileri yerine guvenli ASCII kaynak yapisi
 - `x` ile geri donuste mumkunse ilgili ust kategoriye donen daha rahat gezinme
+- HTML raporlarda toolbox ile uyumlu koyu tema ve daha okunur tablolar
 
 ### Uygulama Yukleyici
 
@@ -297,7 +301,7 @@ Depoda yalnizca aktif kullanilan dosyalar tutulmalidir. Yerel deneme, yedek veya
 
 ## Surum
 
-Guncel toolbox surumu: `0.5`
+Guncel toolbox surumu: `0.6`
 
 ## Gelistirici
 
