@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-label="Itchy Toolbox workflow">
+  <rect width="1200" height="260" rx="18" fill="#070a0d"/>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <g transform="translate(56 52)">
+      <rect width="230" height="150" rx="14" fill="#0d1218" stroke="#263847"/>
+      <text x="24" y="48" font-size="24" font-weight="700" fill="#f8e98c">1. On Kontrol</text>
+      <text x="24" y="86" font-size="16" fill="#b6c1cb">Admin, internet, winget</text>
+      <text x="24" y="116" font-size="16" fill="#69e8ff">HTML rapor</text>
+    </g>
+    <path d="M315 127h80" stroke="#33424d" stroke-width="4"/>
+    <path d="M395 127l-14-10v20z" fill="#33424d"/>
+    <g transform="translate(420 52)">
+      <rect width="230" height="150" rx="14" fill="#0d1218" stroke="#263847"/>
+      <text x="24" y="48" font-size="24" font-weight="700" fill="#f8e98c">2. Kurulum</text>
+      <text x="24" y="86" font-size="16" fill="#b6c1cb">Profil veya secimli</text>
+      <text x="24" y="116" font-size="16" fill="#69e8ff">Winget + ozel akis</text>
+    </g>
+    <path d="M679 127h80" stroke="#33424d" stroke-width="4"/>
+    <path d="M759 127l-14-10v20z" fill="#33424d"/>
+    <g transform="translate(784 52)">
+      <rect width="230" height="150" rx="14" fill="#0d1218" stroke="#263847"/>
+      <text x="24" y="48" font-size="24" font-weight="700" fill="#f8e98c">3. Onarim</text>
+      <text x="24" y="86" font-size="16" fill="#b6c1cb">DISM, SFC, ag reset</text>
+      <text x="24" y="116" font-size="16" fill="#69e8ff">Windows araclari</text>
+    </g>
+    <path d="M1043 127h58" stroke="#33424d" stroke-width="4"/>
+    <path d="M1101 127l-14-10v20z" fill="#33424d"/>
+    <text x="1116" y="133" font-size="18" fill="#00e676">Teslim</text>
+  </g>
+</svg>

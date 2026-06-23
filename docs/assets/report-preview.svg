@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Itchy Toolbox HTML report preview">
+  <rect width="1200" height="720" rx="18" fill="#070a0d"/>
+  <rect x="34" y="34" width="1132" height="652" rx="14" fill="#0a0f14" stroke="#263847"/>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="70" y="94" font-size="16" font-weight="800" fill="#f8e98c">ITCHY TOOLBOX</text>
+    <text x="70" y="138" font-size="38" font-weight="700" fill="#ffffff">Sistem Raporu</text>
+    <text x="70" y="170" font-size="18" fill="#b6c1cb">Donanim, Windows, disk, RAM, ekran karti ve servis durumunu tek sayfada toplar.</text>
+    <rect x="70" y="208" width="246" height="62" rx="8" fill="#091119" stroke="#263847"/>
+    <text x="92" y="232" font-size="14" fill="#b6c1cb">Bilgisayar</text>
+    <text x="92" y="256" font-size="18" fill="#ffffff">MELIHWASTAKEN</text>
+    <rect x="334" y="208" width="246" height="62" rx="8" fill="#091119" stroke="#263847"/>
+    <text x="356" y="232" font-size="14" fill="#b6c1cb">Yonetici</text>
+    <text x="356" y="256" font-size="18" fill="#00e676">Evet</text>
+    <rect x="598" y="208" width="246" height="62" rx="8" fill="#091119" stroke="#263847"/>
+    <text x="620" y="232" font-size="14" fill="#b6c1cb">Olusturma zamani</text>
+    <text x="620" y="256" font-size="18" fill="#ffffff">2026-06-23</text>
+    <rect x="70" y="310" width="1060" height="144" rx="8" fill="#0d1218" stroke="#263847"/>
+    <text x="96" y="352" font-size="22" font-weight="700" fill="#f8e98c">Islemci</text>
+    <rect x="96" y="376" width="1008" height="36" fill="#12202a"/>
+    <text x="116" y="400" font-size="15" font-weight="700" fill="#69e8ff">Islemci</text>
+    <text x="430" y="400" font-size="15" font-weight="700" fill="#69e8ff">Cekirdek</text>
+    <text x="590" y="400" font-size="15" font-weight="700" fill="#69e8ff">Mantiksal</text>
+    <text x="760" y="400" font-size="15" font-weight="700" fill="#69e8ff">Frekans</text>
+    <text x="116" y="434" font-size="15" fill="#e8edf2">AMD Ryzen 7 5700X 8-Core Processor</text>
+    <text x="430" y="434" font-size="15" fill="#e8edf2">8</text>
+    <text x="590" y="434" font-size="15" fill="#e8edf2">16</text>
+    <text x="760" y="434" font-size="15" fill="#e8edf2">3401 MHz</text>
+    <rect x="70" y="484" width="1060" height="146" rx="8" fill="#0d1218" stroke="#263847"/>
+    <text x="96" y="526" font-size="22" font-weight="700" fill="#f8e98c">RAM Modulleri</text>
+    <rect x="96" y="550" width="1008" height="36" fill="#12202a"/>
+    <text x="116" y="574" font-size="15" font-weight="700" fill="#69e8ff">Uretici</text>
+    <text x="300" y="574" font-size="15" font-weight="700" fill="#69e8ff">Parca numarasi</text>
+    <text x="558" y="574" font-size="15" font-weight="700" fill="#69e8ff">Slot</text>
+    <text x="700" y="574" font-size="15" font-weight="700" fill="#69e8ff">Hiz MHz</text>
+    <text x="116" y="608" font-size="15" fill="#e8edf2">Kingston</text>
+    <text x="300" y="608" font-size="15" fill="#e8edf2">KF3600C17D4/8GX</text>
+    <text x="558" y="608" font-size="15" fill="#e8edf2">DIMM 0</text>
+    <text x="700" y="608" font-size="15" fill="#e8edf2">3600</text>
+  </g>
+</svg>

@@ -1,127 +1,124 @@
 # Itchy Toolbox
 
-Itchy Toolbox, Windows kurulum ve teknik servis islemlerini tek bir CMD arayuzunde toplayan hafif bir sistem aracidir.
+![Itchy Toolbox Logo](docs/assets/itchy-logo.svg)
 
-Program; uygulama kurulumu, Windows onarim komutlari, hizmet ve ozellik yonetimi, ag kontrolleri, sistem raporlama, lisans goruntuleme ve kayitli WiFi bilgilerini okuma gibi sik kullanilan islemleri menuler halinde sunar.
+<p align="center">
+  <a href="https://github.com/Bogazitchy/Itchy-Toolbox/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/Bogazitchy/Itchy-Toolbox?style=for-the-badge&label=release"></a>
+  <img alt="Windows" src="https://img.shields.io/badge/Windows-10%20%2F%2011-69e8ff?style=for-the-badge&logo=windows">
+  <img alt="CMD" src="https://img.shields.io/badge/CMD%20%2B%20PowerShell-toolbox-f8e98c?style=for-the-badge">
+  <img alt="Created by" src="https://img.shields.io/badge/created%20by-M.Mert-00e676?style=for-the-badge">
+</p>
 
-GitHub: [Bogazitchy/Itchy-Toolbox](https://github.com/Bogazitchy/Itchy-Toolbox)
+Itchy Toolbox, Windows kurulum ve teknik servis islemlerini tek bir CMD arayuzunde toplayan hafif bir sistem aracidir. Uygulama kurulumu, Windows onarim komutlari, hizmet ve ozellik yonetimi, ag kontrolleri, HTML raporlama, lisans islemleri ve kayitli WiFi bilgileri tek menuden yonetilir.
 
-Guncel surum: `0.6`
+> Guncel surum: `0.6`
+
+## Onizleme
+
+### Kisa Demo
+
+![Itchy Toolbox demo](docs/assets/itchy-demo.gif)
+
+### Terminal Arayuzu
+
+![Terminal preview](docs/assets/terminal-preview.svg)
+
+### HTML Rapor Temasi
+
+![Report preview](docs/assets/report-preview.svg)
+
+### Teknik Servis Akisi
+
+![Workflow](docs/assets/workflow.svg)
 
 ## Indirme
 
-En guncel surum icin GitHub Releases bolumundeki `Itchy-Toolbox-v0.6` paketini indirin:
+En guncel paket icin GitHub Releases bolumundeki `Itchy-Toolbox-v0.6.zip` dosyasini indirin.
 
 [Latest Release](https://github.com/Bogazitchy/Itchy-Toolbox/releases/latest)
 
-Kaynak kod ZIP'i yerine release paketini indirmek daha pratiktir; paket icinde ana CMD dosyasi, rapor scriptleri ve README birlikte gelir.
+Release paketi icinde ana CMD dosyasi, PowerShell rapor scriptleri ve README birlikte gelir. Kaynak kod ZIP'i yerine release paketini kullanmak daha pratiktir.
 
-## Ozellikler
+## Neler Sunar?
 
-### Sadelestirilmis Ana Menu
+| Bolum | Ne ise yarar? |
+| --- | --- |
+| Uygulama Yukleyici | Kategorili uygulama listesi, coklu secim, winget ve ozel kurulum akislarini yonetir. |
+| Kurulum Profilleri | Standart cihaz, teknik servis, oyun-medya ve gelistirici setlerini tek secimle kurar. |
+| Windows Yonetimi | Onarim, hizmetler, Windows ozellikleri, ayarlar, sistem araclari ve surucu kisayollarini toplar. |
+| Ag Araclari | Ping, DNS, ag reset, IP bilgisi, WiFi sifreleri ve HTML ag raporu uretir. |
+| Rapor / Kontrol | On kontrol, kurulum sonrasi kontrol, sistem raporu ve kurulum raporlarini hazirlar. |
+| Bakim / Ayar / Guncelleme | Bakim profilleri, loglar, tema, splash ve GitHub self-update islemlerini yonetir. |
 
-Ana menu 20 ayri giris yerine 9 ust kategoriye toparlanmistir. Eski islevler silinmeden daha okunabilir basliklar altina alinmistir:
+## Arayuz
 
-- Uygulama Yukleyici
-- Kurulum Profilleri
-- Windows Yonetimi
-- Ag Araclari
-- Rapor / Kontrol
-- Yedekleme / Kurtarma
-- Lisans / Bilgi
-- Bakim / Ayar / Guncelleme
-- Yonetici Olarak Yeniden Baslat
+- Pixel tarzinda `ITCHY TOOLBOX` acilis ve ust banner.
+- Ana menude dashboard tipi hizli islem alani.
+- Her ekranda `Admin`, `Winget` ve `Rapor klasoru` durum cubugu.
+- Acilista admin, winget ve internet kontrolu.
+- CMD uyumlu sade tablo cizgileri.
+- `x` ile geri donuste mumkunse ilgili ust kategoriye donen daha rahat gezinme.
+- HTML raporlarda koyu tema, tam genislik kartlar ve yatay kaydirma gerektirmeyen tablolar.
 
-### Arayuz
+## Uygulama Yukleyici
 
-- Pixel tarzinda `ITCHY TOOLBOX` acilis ve ust banner
-- Gri `ITCHY`, renkli `TOOLBOX` ayrimi
-- Ana menude dashboard tipi hizli islem alani
-- Her ekranda admin, winget ve rapor klasoru durum cubugu
-- Acilista kisa admin, winget ve internet kontrolu
-- CMD uyumlu sade tablo cizgileri
-- Bozulmaya acik Unicode kutu cizgileri yerine guvenli ASCII kaynak yapisi
-- `x` ile geri donuste mumkunse ilgili ust kategoriye donen daha rahat gezinme
-- HTML raporlarda toolbox ile uyumlu koyu tema ve daha okunur tablolar
+Uygulama Yukleyici, sik kullanilan programlari kategori halinde listeler. Birden fazla programi virgulle secerek toplu kurulum yapabilirsiniz.
 
-### Uygulama Yukleyici
+```text
+9,40,46
+```
 
-- Kategorilere ayrilmis uygulama listesi
-- Coklu secim ile toplu kurulum
-- `winget` uzerinden sessiz kurulum destegi
-- Ozel kurulum isaretli uygulamalar
-- Standart teknik servis uygulamalarina hizli erisim
-- Sorunlu `winget` paketleri icin ozel indirme/kurulum akisi
-- Kurulum logu, basarisizlari tekrar deneme ve HTML kurulum raporu
+Mevcut kategori gruplari:
 
-Mevcut uygulama kategorileri:
+| Kategori | Ornekler |
+| --- | --- |
+| Mesajlasma | Discord, WhatsApp, Telegram, Zoom |
+| Oyun Kutuphanesi | Epic Games, Steam, Ubisoft Connect, EA App |
+| Tarayici | Chrome, Edge, Opera, Firefox, Brave, Tor, Zen |
+| Donanim | HWiNFO, HWMonitor, CPU-Z, GPU-Z, FurMark, BatteryInfo |
+| Disk / USB | CrystalDiskInfo, CrystalDiskMark, WizTree, Everything, Rufus, Ventoy |
+| Multimedya | CapCut, GIMP, OBS Studio, Lightshot, HandBrake |
+| Belgeler | Adobe Acrobat Reader, PDF-XChange Editor, LibreOffice |
+| Uzak Destek | AnyDesk, Alpemix, RustDesk |
+| Guvenlik | Malwarebytes, AdwCleaner |
+| Runtime / Gelistirme | VC++ Runtime, .NET Runtime, Node.js, Git, VS Code |
+| Itchy Programlari | Itchy YouTube Downloader, Itchy Backup |
 
-- Mesajlasma
-- Oyun Kutuphanesi
-- Tarayici
-- Multimedya
-- Video-Ses Oynatici
-- Indirme Araclari
-- Belgeler
-- Gelistirme
-- Donanim
-- Disk-Depolama
-- USB-ISO
-- Backup-Recovery
-- Uzak Destek
-- Guvenlik Tarama
-- Runtime
-- Temizlik
-- Diger
-- Uninstaller
-- Itchy Programlari
+## Ozel Kurulum Destegi
 
-### Kurulum Profilleri
+Bazi uygulamalar `winget` manifest hatasi, hash uyusmazligi, Microsoft Store kaynak farki veya yonetici oturumu kisiti nedeniyle standart kurulumda sorun cikarabilir. Bu uygulamalar toolbox icinde ozel akisa alinmistir.
 
-Hazir profiller tek secimle sik kullanilan uygulama setlerini kurar:
+| Uygulama | Ozel akis |
+| --- | --- |
+| WhatsApp | Microsoft Store kaynak ID'si ile kurulur. |
+| CrystalDiskInfo | Winget hash sorunu olursa resmi kaynaktan baslatilir. |
+| Spotify | Yonetici oturumu kisitini asmak icin ozel kurulum denenir. |
+| DMDE | Resmi siteden indirilip cikarilir. |
+| RustDesk | GitHub son surum dosyasindan indirilir. |
+| Malwarebytes | Winget 403 hatasi yerine resmi indirme adresi kullanilir. |
+| IObit Unlocker | Winget hash sorunu yerine resmi indirme adresi kullanilir. |
+| Java Uninstaller | Oracle Java Uninstall Tool indirilip baslatilir. |
+| Itchy YouTube Downloader | [Bogazitchy/Itchy-YouTube-Downloader](https://github.com/Bogazitchy/Itchy-YouTube-Downloader) son release setup dosyasi kullanilir. |
+| Itchy Backup | [Bogazitchy/Itchy-Backup](https://github.com/Bogazitchy/Itchy-Backup) son release setup dosyasi kullanilir. |
 
-- Standart cihaz
-- Teknik servis
-- Oyun ve medya
-- Gelistirici
+Ozel kurulumlu uygulamalar listede `*` ile isaretlenir.
 
-Bu menude ayrica:
+## Raporlama
 
-- Kurulu `winget` uygulama listesini JSON olarak disari aktarma
-- Daha once aktarilmis `winget` JSON listesinden toplu kurulum
+Itchy Toolbox teknik servis islemleri icin okunabilir HTML raporlar uretir.
 
-secenekleri bulunur.
+| Rapor | Icerik |
+| --- | --- |
+| `Itchy-Precheck-Report.html` | Admin, internet, winget, lisans, RAM, disk ve reboot durumu. |
+| `Itchy-Install-Report.html` | Kurulum denemeleri, basarili ve basarisiz uygulamalar. |
+| `Itchy-System-Report.html` | Windows, anakart, BIOS, CPU, RAM, disk, GPU, servis ozeti ve guncellemeler. |
+| `Itchy-Network-Report.html` | Bagdastiricilar, IP, DNS, rota, WiFi profil adlari ve baglanti testleri. |
 
-### Ozel Kurulum Destegi
+Rapor tablolarinda yatay kaydirma gerektirmeyen, ekran goruntusu almaya daha uygun tam genislik tasarim kullanilir.
 
-Bazi uygulamalar `winget` manifest hatasi, hash uyusmazligi, Microsoft Store kaynak farki veya yonetici oturumu kisiti nedeniyle standart kurulumda sorun cikarabilir. Bu uygulamalar toolbox icinde ozel akisa alinmistir:
+## Windows Onarim
 
-- WhatsApp: Microsoft Store kaynak ID'si ile kurulur.
-- CrystalDiskInfo: `winget` hash sorunu yasandiginda resmi indirme kaynagindan baslatilir.
-- Spotify: Yonetici oturumunda normal kurulum reddedildigi icin ozel makine kurulumu denenir.
-- DMDE: Resmi sitesinden indirilip cikarilir ve calistirilir.
-- RustDesk: GitHub son surum dosyasindan indirilir.
-- Malwarebytes: `winget` 403 hatasi yerine resmi Malwarebytes indirme adresi kullanilir.
-- IObit Unlocker: `winget` hash sorunu yerine resmi indirme adresi kullanilir.
-- Java Uninstaller: Oracle Java Uninstall Tool indirilip baslatilir.
-- Itchy YouTube Downloader: [Bogazitchy/Itchy-YouTube-Downloader](https://github.com/Bogazitchy/Itchy-YouTube-Downloader) reposunun en guncel release setup dosyasi indirilip baslatilir.
-- Itchy Backup: [Bogazitchy/Itchy-Backup](https://github.com/Bogazitchy/Itchy-Backup) reposunun en guncel release setup dosyasi indirilip baslatilir.
-
-Bu uygulamalar uygulama listesinde `*` ile isaretlenir.
-
-### Windows Yonetimi
-
-- Hizmet Yonetimi
-- Ozellik Yonetimi
-- Windows Onarim
-- Windows Ayarlari
-- Sistem Araclari
-- Surucu Yardimci
-- PC zaman ayarli kapatma
-
-### Windows Onarim
-
-Windows Onarim menusu su islemleri toplar:
+Windows Onarim menusu sik kullanilan servis komutlarini guvenli bir yerde toplar.
 
 - CHKDSK online disk tarama
 - DISM ve SFC sistem dosyasi onarimi
@@ -133,104 +130,25 @@ Windows Onarim menusu su islemleri toplar:
 - Windows Update bilesenlerini sifirlama
 - Ag onarim komutlari
 
-### Ag Araclari
+## Ag Araclari
 
-Ag Araclari menusu ag ile ilgili islemleri tek baslikta toplar:
+- Tanimli sitelerin ping ve DNS surelerini anlik gosterir.
+- Girilen alan adi icin ping olcer.
+- Girilen alan adi icin DNS sorgu suresini olcer.
+- Cloudflare, AdGuard, Quad9, ControlD ve Google DNS sunucularini test eder.
+- Aktif ag bagdastiricilarinda DNS degistirebilir.
+- DNS ayarlarini otomatik moda alabilir.
+- Kayitli WiFi bilgilerini gosterir.
+- Detayli HTML ag raporu olusturur.
 
-- Tanimli sitelerin ping ve DNS surelerini anlik gosterir
-- Girilen alan adi icin ping olcer
-- Girilen alan adi icin DNS sorgu suresini olcer
-- Cloudflare, AdGuard, Quad9, ControlD ve Google DNS sunucularini test eder
-- Aktif ag bagdastiricilarinda DNS degistirebilir
-- DNS ayarlarini otomatik moda alabilir
-- DNS onbellegini temizler
-- Winsock ve IP reset komutlarini calistirir
-- IP ve bagdastirici bilgisini gosterir
-- Masaustune detayli HTML ag raporu olusturur
-- Kayitli WiFi bilgilerini gosterir
-- Windows ag ayarlarini acar
+## Kurulum Profilleri
 
-HTML raporlar koyu temali, tablolu ve teknik servis kontrolune uygun okunabilir bir formatta uretilir.
-
-### Rapor / Kontrol
-
-Rapor / Kontrol menusu cihaz kontrolu ve raporlama islerini tek yerde toplar:
-
-- On Kontrol
-- Kurulum Sonrasi Kontrol
-- Sistem Hakkinda
-- Detayli sistem raporu
-- Detayli ag raporu
-- Kurulum HTML raporu
-
-### On Kontrol
-
-On Kontrol menusu cihaz kuruluma hazir mi hizlica denetler:
-
-- Yonetici yetkisi
-- Internet testi
-- Winget varligi
-- Windows surumu
-- Lisans durumu
-- RAM ve bos disk alani
-- Bekleyen yeniden baslatma kontrolu
-
-Sonuc ekrana yazdirilabilir veya `Itchy-Precheck-Report.html` olarak kaydedilebilir.
-
-### Kurulum Sonrasi Kontrol
-
-- Son kurulum HTML raporu
-- Basarisiz kurulumlari tekrar deneme
-- Winget kurulu uygulama listesi
-- Windows Update
-- Aygit Yoneticisi
-- Sistem HTML raporu
-
-### Surucu Yardimci
-
-Riskli otomatik surucu kurulumlari yerine guvenli kisayollar sunar:
-
-- Aygit Yoneticisi
-- Windows Update
-- NVIDIA, AMD ve Intel surucu sayfalari
-- Anakart/CPU bilgisi icin sistem raporu
-- DDU kurulumu
-
-### Windows Ayarlari
-
-Aktivasyon, Windows Update, varsayilan uygulamalar, ag, depolama, baslangic uygulamalari, guc secenekleri, uzak masaustu, Bluetooth ve yazici ayarlarina hizli erisim saglar.
-
-### Bakim Profilleri
-
-- Hafif bakim: DNS temizleme, temp temizleme ve kurulum raporu
-- Derin bakim: geri yukleme noktasi, DISM/SFC ve sistem raporu
-- Ag bakim: DNS/Winsock/IP onarimi
-- Cihaz teslim raporu: on kontrol, sistem raporu, ag raporu ve kurulum raporu
-
-### Log / Ayar / Guncelleme
-
-- Son kurulum logunu gosterir
-- Log klasorunu acar
-- Rapor klasoru ayari yapar
-- Tema ayari yapar
-- Splash ekranini acip kapatir
-- Toolbox'i GitHub `main` uzerinden gunceller
-
-### Lisans / Bilgi
-
-- Windows ve Office lisans islemleri
-- Sistem Hakkinda
-- Kayitli WiFi Bilgileri
-- Detayli sistem raporu
-
-### Yedekleme ve Geri Yukleme
-
-- Sistem geri yukleme noktasi olusturma
-- Sistem Geri Yukleme aracini acma
-- Dosya Gecmisi aracini acma
-- Windows Yedekleme ayarlarini acma
-- `winget` uygulama listesini disari aktarma
-- `winget` listesinden uygulama kurma
+| Profil | Icerik |
+| --- | --- |
+| Standart cihaz | Adobe Reader, Chrome, AnyDesk, PotPlayer, WinRAR, Alpemix |
+| Teknik servis | Standart set, 7-Zip, disk araclari, Everything, Rufus, Revo, Sysinternals |
+| Oyun ve medya | Steam, EA App, OBS, codec, VLC, PotPlayer, Spotify, DirectX, VC++ Runtime |
+| Gelistirici | Notepad++, VS Code, Git, Node.js, .NET Runtime, VC++ Runtime, Sysinternals |
 
 ## Gereksinimler
 
@@ -244,43 +162,25 @@ Aktivasyon, Windows Update, varsayilan uygulamalar, ag, depolama, baslangic uygu
 
 ## Kullanim
 
-1. `Itchy ToolBox.cmd` dosyasini calistirin.
-2. Ana menuden numara girerek istediginiz bolume gecin.
-3. Alt menulerde:
-   - `x` geri doner
-   - `q` programdan cikar
-4. Uygulama Yukleyici icinde birden fazla uygulama secmek icin numaralari virgul ile girin.
-
-Ornek:
-
-```text
-1,9,28,40
-```
-
-## Yonetici Yetkisi
-
-Program yonetici izni olmadan da acilir. Ancak su islemlerde yonetici yetkisi gerekebilir:
-
-- Hizmet baslatma veya kapatma
-- Windows ozelliklerini degistirme
-- DNS degistirme
-- DISM, SFC, CHKDSK ve Windows Update sifirlama
-- Geri yukleme noktasi olusturma
-- Lisans islemleri
-
-Ana menudeki `Yonetici Olarak Yeniden Baslat` secenegi ile araci yukseltilmis izinle tekrar acabilirsiniz.
+1. Release paketini indirin ve ZIP dosyasini cikarin.
+2. `Itchy ToolBox.cmd` dosyasini calistirin.
+3. Gerekirse ana menuden `Yonetici Olarak Yeniden Baslat` secenegini kullanin.
+4. Ana menuden numara veya hizli islem harfi girin.
+5. Alt menulerde `x` geri doner, `q` programdan cikar.
 
 ## Olusturulan Dosyalar
 
-Program bazi seceneklerde masaustune dosya olusturabilir:
+Program bazi seceneklerde masaustune veya ayarlanan rapor klasorune dosya olusturabilir.
 
-- `Itchy-Winget-Apps.json`
-- `Itchy-Precheck-Report.html`
-- `Itchy-Install-Report.html`
-- `Itchy-System-Report.html`
-- `Itchy-Network-Report.html`
-- `Itchy-Toolbox-Data\Logs\Itchy-Toolbox.log`
-- `Itchy-Toolbox-Data\last-install-log.csv`
+| Dosya | Aciklama |
+| --- | --- |
+| `Itchy-Winget-Apps.json` | Winget uygulama disari aktarimi |
+| `Itchy-Precheck-Report.html` | On kontrol raporu |
+| `Itchy-Install-Report.html` | Kurulum raporu |
+| `Itchy-System-Report.html` | Sistem raporu |
+| `Itchy-Network-Report.html` | Ag raporu |
+| `Itchy-Toolbox-Data\Logs\Itchy-Toolbox.log` | Toolbox log dosyasi |
+| `Itchy-Toolbox-Data\last-install-log.csv` | Son kurulum kayitlari |
 
 ## Guvenli Kullanim Notlari
 
@@ -292,16 +192,13 @@ Program bazi seceneklerde masaustune dosya olusturabilir:
 
 ## Dosyalar
 
-- `Itchy ToolBox.cmd`: Ana program
-- `Itchy.Reports.ps1`: HTML rapor uretici
-- `Itchy.Tools.ps1`: On kontrol, kurulum raporu ve self-update yardimcisi
-- `README.md`: Proje aciklamasi ve kullanim notlari
-
-Depoda yalnizca aktif kullanilan dosyalar tutulmalidir. Yerel deneme, yedek veya gecici dosyalar repo disinda birakilabilir.
-
-## Surum
-
-Guncel toolbox surumu: `0.6`
+| Dosya | Gorev |
+| --- | --- |
+| `Itchy ToolBox.cmd` | Ana program |
+| `Itchy.Reports.ps1` | Sistem ve ag HTML raporlari |
+| `Itchy.Tools.ps1` | On kontrol, kurulum raporu ve self-update yardimcisi |
+| `README.md` | Proje aciklamasi |
+| `docs/assets/` | README logo ve onizleme gorselleri |
 
 ## Gelistirici
 
