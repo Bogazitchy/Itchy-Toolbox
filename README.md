@@ -11,7 +11,7 @@
 
 Itchy Toolbox, Windows kurulum ve teknik servis islemlerini tek bir CMD arayuzunde toplayan hafif bir sistem aracidir. Uygulama kurulumu, Windows onarim komutlari, hizmet ve ozellik yonetimi, ag kontrolleri, HTML raporlama, lisans islemleri ve kayitli WiFi bilgileri tek menuden yonetilir.
 
-> Guncel surum: `0.6`
+> Guncel surum: `0.7`
 
 ## Onizleme
 
@@ -33,7 +33,7 @@ Itchy Toolbox, Windows kurulum ve teknik servis islemlerini tek bir CMD arayuzun
 
 ## Indirme
 
-En guncel paket icin GitHub Releases bolumundeki `Itchy-Toolbox-v0.6.zip` dosyasini indirin.
+En guncel paket icin GitHub Releases bolumundeki `Itchy-Toolbox-v0.7.zip` dosyasini indirin.
 
 [Latest Release](https://github.com/Bogazitchy/Itchy-Toolbox/releases/latest)
 
@@ -43,17 +43,17 @@ Release paketi icinde ana CMD dosyasi, PowerShell rapor scriptleri ve README bir
 
 | Bolum | Ne ise yarar? |
 | --- | --- |
-| Uygulama Yukleyici | Kategorili uygulama listesi, coklu secim, winget ve ozel kurulum akislarini yonetir. |
-| Kurulum Profilleri | Standart cihaz, teknik servis, oyun-medya ve gelistirici setlerini tek secimle kurar. |
-| Windows Yonetimi | Onarim, hizmetler, Windows ozellikleri, ayarlar, sistem araclari ve surucu kisayollarini toplar. |
+| Uygulama Yukleyici | Kategorili uygulama listesi, kurulum profilleri, winget import/export ve ozel kurulum akislarini yonetir. |
+| Onarim / Bakim | Windows onarim, MemoryDiag, bakim profilleri, sistem araclari, hizmet/ozellik yonetimi, yedekleme ve surucu kisayollarini toplar. |
 | Ag Araclari | Ping, DNS, ag reset, IP bilgisi, WiFi sifreleri ve HTML ag raporu uretir. |
 | Rapor / Kontrol | On kontrol, kurulum sonrasi kontrol, sistem raporu ve kurulum raporlarini hazirlar. |
-| Bakim / Ayar / Guncelleme | Bakim profilleri, loglar, tema, splash ve GitHub self-update islemlerini yonetir. |
+| Lisans / Bilgi | Windows/Office lisans islemleri, sistem ozeti ve kayitli WiFi bilgilerine ulasir. |
+| Ayar / Log / Guncelleme | Loglar, rapor klasoru, tema, splash ve GitHub self-update islemlerini yonetir. |
 
 ## Arayuz
 
 - Pixel tarzinda `ITCHY TOOLBOX` acilis ve ust banner.
-- Ana menude dashboard tipi hizli islem alani.
+- Ana menude 6 temel kategori ve dashboard tipi hizli islem alani.
 - Her ekranda `Admin`, `Winget` ve `Rapor klasoru` durum cubugu.
 - Acilista admin, winget ve internet kontrolu.
 - CMD uyumlu sade tablo cizgileri.
@@ -62,7 +62,7 @@ Release paketi icinde ana CMD dosyasi, PowerShell rapor scriptleri ve README bir
 
 ## Uygulama Yukleyici
 
-Uygulama Yukleyici, sik kullanilan programlari kategori halinde listeler. Birden fazla programi virgulle secerek toplu kurulum yapabilirsiniz.
+Uygulama Yukleyici, sik kullanilan programlari kategori halinde listeler. Birden fazla programi virgulle secerek toplu kurulum yapabilirsiniz. Kurulum Profilleri de bu ekranin icindeki `[p]` kisayolundan acilir; ana menude ayri bir kategori olarak durmaz.
 
 ```text
 9,40,46
@@ -143,12 +143,29 @@ Windows Onarim menusu sik kullanilan servis komutlarini guvenli bir yerde toplar
 
 ## Kurulum Profilleri
 
+Kurulum profilleri Uygulama Yukleyici icinde yer alir. Standart cihaz kurulumlari, teknik servis setleri ve winget yedekleme/geri yukleme islemleri burada tutulur.
+
 | Profil | Icerik |
 | --- | --- |
 | Standart cihaz | Adobe Reader, Chrome, AnyDesk, PotPlayer, WinRAR, Alpemix |
 | Teknik servis | Standart set, 7-Zip, disk araclari, Everything, Rufus, Revo, Sysinternals |
 | Oyun ve medya | Steam, EA App, OBS, codec, VLC, PotPlayer, Spotify, DirectX, VC++ Runtime |
 | Gelistirici | Notepad++, VS Code, Git, Node.js, .NET Runtime, VC++ Runtime, Sysinternals |
+
+## Onarim / Bakim
+
+Bakim ve onarimla ilgili bolumler ana menude tek kategori altinda toplanir. MemoryDiag ana menuden sonra dogrudan bu ekranda gorunur.
+
+- Windows Onarim
+- MemoryDiag
+- Bakim Profilleri
+- Sistem Araclari
+- Hizmet Yonetimi
+- Ozellik Yonetimi
+- Yedekleme / Geri Yukleme
+- Surucu Yardimci
+- Windows Ayarlari
+- PC zaman ayarli kapatma
 
 ## Gereksinimler
 

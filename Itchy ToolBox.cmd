@@ -6,7 +6,7 @@
 setlocal EnableDelayedExpansion
 chcp 65001 >nul
 title I T C H Y   T O O L B O X
-set "VERSION=0.6"
+set "VERSION=0.7"
 set "TOOLBOX_FILE=%~f0"
 set "TOOLBOX_DIR=%~dp0"
 set "DATA_DIR=%USERPROFILE%\Desktop\Itchy-Toolbox-Data"
@@ -57,14 +57,12 @@ echo   %YLW%%BLD%-- Ana Menu%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo.
 echo   %CYN%[1]%RST% Uygulama Yukleyici
-echo   %CYN%[2]%RST% Kurulum Profilleri
-echo   %CYN%[3]%RST% Windows Yonetimi
-echo   %CYN%[4]%RST% Ag Araclari
-echo   %CYN%[5]%RST% Rapor / Kontrol
-echo   %CYN%[6]%RST% Yedekleme / Kurtarma
-echo   %CYN%[7]%RST% Lisans / Bilgi
-echo   %CYN%[8]%RST% Bakim / Ayar / Guncelleme
-echo   %CYN%[9]%RST% Yonetici Olarak Yeniden Baslat
+echo   %CYN%[2]%RST% Onarim / Bakim
+echo   %CYN%[3]%RST% Ag Araclari
+echo   %CYN%[4]%RST% Rapor / Kontrol
+echo   %CYN%[5]%RST% Lisans / Bilgi
+echo   %CYN%[6]%RST% Ayar / Log / Guncelleme
+echo   %CYN%[7]%RST% Yonetici Olarak Yeniden Baslat
 echo.
 echo   %DIM%PC: %YLW%!MY_PC!%DIM%   IP: %YLW%!MY_IP!%DIM%   Tema: %YLW%!THEME!%RST%
 echo.
@@ -73,7 +71,7 @@ echo   %GRY%^|%RST% %YLW%Hizli Islemler%RST%                          %GRY%^|%RS
 echo   %GRY%+----------------------------------------+----------------------------------------+%RST%
 echo   %GRY%^|%RST% %CYN%[p]%RST% On kontrol HTML raporu              %GRY%^|%RST% %CYN%[s]%RST% Standart kurulum seti              %GRY%^|%RST%
 echo   %GRY%^|%RST% %CYN%[r]%RST% Detayli sistem raporu               %GRY%^|%RST% %CYN%[n]%RST% Ag onarim komutlari                %GRY%^|%RST%
-echo   %GRY%^|%RST% %CYN%[u]%RST% GitHub'dan guncelle                 %GRY%^|%RST% %CYN%[w]%RST% Windows onarim menusu              %GRY%^|%RST%
+echo   %GRY%^|%RST% %CYN%[u]%RST% GitHub'dan guncelle                 %GRY%^|%RST% %CYN%[w]%RST% Onarim / bakim menusu              %GRY%^|%RST%
 echo   %GRY%+----------------------------------------+----------------------------------------+%RST%
 echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
@@ -94,37 +92,38 @@ if /i "!choice!"=="s" (
     call :INSTALL_PROFILE "Standart cihaz" "40 9 46 36 69 47"
 )
 if /i "!choice!"=="n" call :NETWORK_REPAIR
-if /i "!choice!"=="w" (set "RETURN_MENU=MAIN_MENU" & goto :WINDOWS_REPAIR)
+if /i "!choice!"=="w" (set "RETURN_MENU=MAIN_MENU" & goto :WINDOWS_MANAGEMENT_MENU)
 if "!choice!"=="1" goto :APP_INSTALLER
-if "!choice!"=="2" goto :STANDARD_INSTALLER
-if "!choice!"=="3" goto :WINDOWS_MANAGEMENT_MENU
-if "!choice!"=="4" goto :NETWORK_TOOLS_MENU
-if "!choice!"=="5" goto :REPORT_CONTROL_MENU
-if "!choice!"=="6" goto :BACKUP_RECOVERY_MENU
-if "!choice!"=="7" goto :LICENSE_INFO_MENU
-if "!choice!"=="8" goto :MAINT_SETTINGS_MENU
-if "!choice!"=="9" call :RELAUNCH_ADMIN
+if "!choice!"=="2" goto :WINDOWS_MANAGEMENT_MENU
+if "!choice!"=="3" goto :NETWORK_TOOLS_MENU
+if "!choice!"=="4" goto :REPORT_CONTROL_MENU
+if "!choice!"=="5" goto :LICENSE_INFO_MENU
+if "!choice!"=="6" goto :MAINT_SETTINGS_MENU
+if "!choice!"=="7" call :RELAUNCH_ADMIN
 goto :MAIN_MENU
 
 
 :: ============================================================
-:: WINDOWS YONETIMI
+:: ONARIM / BAKIM
 :: ============================================================
 :WINDOWS_MANAGEMENT_MENU
 cls
 call :BANNER
 echo.
-echo   %YLW%%BLD%-- Windows Yonetimi%RST%
+echo   %YLW%%BLD%-- Onarim / Bakim%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
-echo   %DIM%Windows onarim, hizmet, ozellik, ayar ve surucu kisayollari burada toplanir.%RST%
+echo   %DIM%Onarim, bakim, yedekleme ve sistem araclari tek yerde. MemoryDiag burada dogrudan acilir.%RST%
 echo.
 echo   %CYN%[1]%RST% Windows Onarim
-echo   %CYN%[2]%RST% Hizmet Yonetimi
-echo   %CYN%[3]%RST% Ozellik Yonetimi
-echo   %CYN%[4]%RST% Windows Ayarlari
-echo   %CYN%[5]%RST% Sistem Araclari
-echo   %CYN%[6]%RST% Surucu Yardimci
-echo   %CYN%[7]%RST% PC Zaman Ayarli Kapat
+echo   %CYN%[2]%RST% MemoryDiag
+echo   %CYN%[3]%RST% Bakim Profilleri
+echo   %CYN%[4]%RST% Sistem Araclari
+echo   %CYN%[5]%RST% Hizmet Yonetimi
+echo   %CYN%[6]%RST% Ozellik Yonetimi
+echo   %CYN%[7]%RST% Yedekleme / Geri Yukleme
+echo   %CYN%[8]%RST% Surucu Yardimci
+echo   %CYN%[9]%RST% Windows Ayarlari
+echo   %CYN%[10]%RST% PC Zaman Ayarli Kapat
 echo.
 echo   %DIM%[x] geri   [q] cikis%RST%
 echo.
@@ -133,12 +132,15 @@ set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
 if /i "!choice!"=="x" goto :RETURN_OR_MAIN
 if "!choice!"=="1" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :WINDOWS_REPAIR)
-if "!choice!"=="2" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :SERVICE_MENU)
-if "!choice!"=="3" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :FEATURE_MENU)
-if "!choice!"=="4" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :WINDOWS_SETTINGS_MENU)
-if "!choice!"=="5" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :SYSTEM_TOOLS_MENU)
-if "!choice!"=="6" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :DRIVER_HELPER_MENU)
-if "!choice!"=="7" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :SHUTDOWN_TIMER)
+if "!choice!"=="2" start "" mdsched.exe
+if "!choice!"=="3" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :MAINTENANCE_PROFILES)
+if "!choice!"=="4" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :SYSTEM_TOOLS_MENU)
+if "!choice!"=="5" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :SERVICE_MENU)
+if "!choice!"=="6" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :FEATURE_MENU)
+if "!choice!"=="7" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :BACKUP_RECOVERY_MENU)
+if "!choice!"=="8" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :DRIVER_HELPER_MENU)
+if "!choice!"=="9" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :WINDOWS_SETTINGS_MENU)
+if "!choice!"=="10" (set "RETURN_MENU=WINDOWS_MANAGEMENT_MENU" & goto :SHUTDOWN_TIMER)
 goto :WINDOWS_MANAGEMENT_MENU
 
 
@@ -241,22 +243,21 @@ goto :LICENSE_INFO_MENU
 
 
 :: ============================================================
-:: BAKIM / AYAR / GUNCELLEME
+:: AYAR / LOG / GUNCELLEME
 :: ============================================================
 :MAINT_SETTINGS_MENU
 cls
 call :BANNER
 echo.
-echo   %YLW%%BLD%-- Bakim / Ayar / Guncelleme%RST%
+echo   %YLW%%BLD%-- Ayar / Log / Guncelleme%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
-echo   %DIM%Bakim profilleri, tema, log, rapor klasoru ve self-update ayarlari.%RST%
+echo   %DIM%Toolbox ayarlari, loglar, rapor klasoru, tema ve GitHub guncellemesi.%RST%
 echo.
-echo   %CYN%[1]%RST% Bakim Profilleri
-echo   %CYN%[2]%RST% Log / Ayar / Guncelleme
-echo   %CYN%[3]%RST% Rapor klasoru ayarla
-echo   %CYN%[4]%RST% Tema ayarla
-echo   %CYN%[5]%RST% Splash ac/kapat
-echo   %CYN%[6]%RST% GitHub'dan toolbox guncelle
+echo   %CYN%[1]%RST% Log / Rapor kayitlari
+echo   %CYN%[2]%RST% Rapor klasoru ayarla
+echo   %CYN%[3]%RST% Tema ayarla
+echo   %CYN%[4]%RST% Splash ac/kapat
+echo   %CYN%[5]%RST% GitHub'dan toolbox guncelle
 echo.
 echo   %DIM%[x] geri   [q] cikis%RST%
 echo.
@@ -264,12 +265,11 @@ set "choice="
 set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 if /i "!choice!"=="q" goto :EXIT
 if /i "!choice!"=="x" goto :RETURN_OR_MAIN
-if "!choice!"=="1" (set "RETURN_MENU=MAINT_SETTINGS_MENU" & goto :MAINTENANCE_PROFILES)
-if "!choice!"=="2" (set "RETURN_MENU=MAINT_SETTINGS_MENU" & goto :LOG_SETTINGS_MENU)
-if "!choice!"=="3" call :SET_REPORT_DIR
-if "!choice!"=="4" call :SET_THEME
-if "!choice!"=="5" call :TOGGLE_SPLASH
-if "!choice!"=="6" call :SELF_UPDATE
+if "!choice!"=="1" (set "RETURN_MENU=MAINT_SETTINGS_MENU" & goto :LOG_SETTINGS_MENU)
+if "!choice!"=="2" call :SET_REPORT_DIR
+if "!choice!"=="3" call :SET_THEME
+if "!choice!"=="4" call :TOGGLE_SPLASH
+if "!choice!"=="5" call :SELF_UPDATE
 goto :MAINT_SETTINGS_MENU
 
 
@@ -310,7 +310,7 @@ echo.
 call :PRINT_APP_CATEGORIES
 echo.
 echo   %GRY%-----------------------------------------------------------------------%RST%
-echo   %DIM%Coklu secim: 1,15,16   [a] tumu   [r] basarisizlari tekrar dene   [h] HTML rapor   [x] geri   [q] cikis%RST%
+echo   %DIM%Coklu secim: 1,15,16   [p] profiller   [a] tumu   [r] basarisizlari tekrar dene   [h] HTML rapor   [x] geri   [q] cikis%RST%
 echo.
 
 set "choice="
@@ -318,6 +318,10 @@ set /p "choice=  %GRN%Secim: %RST%" || goto :EXIT
 
 if /i "!choice!"=="q" goto :EXIT
 if /i "!choice!"=="x" goto :RETURN_OR_MAIN
+if /i "!choice!"=="p" (
+    set "RETURN_MENU=APP_INSTALLER"
+    goto :STANDARD_INSTALLER
+)
 if /i "!choice!"=="r" (
     call :RETRY_FAILED_APPS
     goto :APP_INSTALLER
@@ -623,7 +627,7 @@ exit /b
 cls
 call :BANNER
 echo.
-echo   %GRY%Ana Menu -- Kurulum Profilleri%RST%
+echo   %GRY%Ana Menu -- Uygulama Yukleyici -- Kurulum Profilleri%RST%
 echo   %YLW%%BLD%-- Kurulum Profilleri%RST%
 echo   %GRY%-----------------------------------------------------------------------%RST%
 echo.
@@ -640,7 +644,7 @@ echo       Notepad++, VS Code, Git, Node.js, .NET Runtime, VC++ Runtime, Sysinte
 echo   %CYN%[5]%RST% Winget uygulama listesini disari aktar
 echo   %CYN%[6]%RST% Winget uygulama listesinden kur
 echo.
-echo   %DIM%Profiller tek tikla sik kullanilan setleri kurar. Ayrintili secim icin Uygulama Yukleyici kullanilir.%RST%
+echo   %DIM%Profiller tek tikla sik kullanilan setleri kurar. Ayrintili secim icin Uygulama Yukleyici'ye donun.%RST%
 echo   %DIM%[x] geri   [q] cikis%RST%
 echo.
 
@@ -1655,8 +1659,6 @@ echo   %CYN%[1]%RST% Geri yukleme noktasi olustur
 echo   %CYN%[2]%RST% Sistem Geri Yukleme'yi ac
 echo   %CYN%[3]%RST% Dosya Gecmisi'ni ac
 echo   %CYN%[4]%RST% Windows Yedekleme ayarlarini ac
-echo   %CYN%[5]%RST% Winget uygulama listesini disari aktar
-echo   %CYN%[6]%RST% Winget uygulama listesinden kur
 echo.
 echo   %DIM%[x] geri   [q] cikis%RST%
 echo.
@@ -1668,8 +1670,6 @@ if "!choice!"=="1" call :CREATE_RESTORE_POINT
 if "!choice!"=="2" start "" rstrui.exe
 if "!choice!"=="3" start "" control.exe /name Microsoft.FileHistory
 if "!choice!"=="4" start "" ms-settings:backup
-if "!choice!"=="5" call :WINGET_EXPORT
-if "!choice!"=="6" call :WINGET_IMPORT
 goto :BACKUP_RECOVERY_MENU
 
 

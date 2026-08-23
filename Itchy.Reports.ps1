@@ -50,6 +50,35 @@ function Convert-ToPreBlock {
         [Net.WebUtility]::HtmlEncode($Text.Trim()) + '</pre></section>'
 }
 
+function Convert-ToSummaryCards {
+    param(
+        [string]$Title,
+        [object[]]$Items,
+        [string]$Note
+    )
+
+    $content = ''
+    if ($Items.Count -gt 0) {
+        $cards = foreach ($item in $Items) {
+            $label = [Net.WebUtility]::HtmlEncode([string]$item.Baslik)
+            $value = [Net.WebUtility]::HtmlEncode([string]$item.Ozet)
+            $detail = [Net.WebUtility]::HtmlEncode([string]$item.Detay)
+            '<article class="summary-item"><span>' + $label + '</span><strong>' + $value + '</strong><p>' + $detail + '</p></article>'
+        }
+        $content = '<div class="summary-grid">' + ($cards -join [Environment]::NewLine) + '</div>'
+    }
+
+    if ([string]::IsNullOrWhiteSpace($content)) {
+        $content = '<p class="empty">Bilgi okunamadı veya kayıt bulunamadı.</p>'
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($Note)) {
+        $content = '<p class="note">' + [Net.WebUtility]::HtmlEncode($Note) + '</p>' + $content
+    }
+
+    return '<section class="summary-section"><h2>' + [Net.WebUtility]::HtmlEncode($Title) + '</h2>' + $content + '</section>'
+}
+
 function Format-Size {
     param([double]$Bytes)
 
@@ -122,6 +151,12 @@ p{margin:0 0 12px}
 .meta strong{display:block;color:#fff;font-size:13px}
 .grid{display:grid;grid-template-columns:1fr;gap:14px;align-items:start}
 section{min-width:0;border:1px solid #263847;background:#0d1218;padding:18px;overflow:visible}
+.summary-section{border-color:#3a4d58;background:linear-gradient(135deg,#0f171f,#0a1016)}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.summary-item{min-width:0;border:1px solid #263847;background:#091119;padding:14px}
+.summary-item span{display:block;color:#69e8ff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px}
+.summary-item strong{display:block;color:#fff;font-size:15px;line-height:1.3;margin-bottom:7px;overflow-wrap:anywhere}
+.summary-item p{color:#b6c1cb;font-size:12px;margin:0;overflow-wrap:anywhere}
 table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px;color:#e8edf2}
 th{background:#12202a;color:#69e8ff;text-align:left;font-weight:700}
 th,td{padding:7px 8px;border-bottom:1px solid #202b34;vertical-align:top;white-space:normal;overflow-wrap:anywhere;word-break:break-word;hyphens:auto}
@@ -180,6 +215,53 @@ function New-SystemReport {
     $boot = if ($os.LastBootUpTime) { $os.LastBootUpTime } else { '-' }
     $uptime = if ($os.LastBootUpTime) { (New-TimeSpan -Start $os.LastBootUpTime -End (Get-Date)).ToString() } else { '-' }
     $secureBoot = try { Confirm-SecureBootUEFI } catch { 'Okunamadı' }
+    $diskTotal = ($disks | Measure-Object -Property Size -Sum).Sum
+    $diskModels = @($disks | Where-Object { $_.Model } | ForEach-Object { ($_.Model -replace '\s+', ' ').Trim() }) -join ' | '
+    $ramCount = @($ram).Count
+    $ramSpeeds = @(
+        $ram | ForEach-Object {
+            if ($_.ConfiguredClockSpeed) {
+                "$($_.ConfiguredClockSpeed) MHz"
+            } elseif ($_.Speed) {
+                "$($_.Speed) MHz"
+            }
+        } | Sort-Object -Unique
+    ) -join ', '
+    $cpuCount = @($cpu).Count
+    $cpuCores = ($cpu | Measure-Object -Property NumberOfCores -Sum).Sum
+    $cpuThreads = ($cpu | Measure-Object -Property NumberOfLogicalProcessors -Sum).Sum
+    $cpuName = if ($cpuCount -gt 0) { @($cpu)[0].Name } else { '-' }
+    $gpuNames = @($gpus | Where-Object { $_.Name } | ForEach-Object { $_.Name }) -join ' | '
+    $gpuMemory = @($gpus | Where-Object { $_.AdapterRAM } | ForEach-Object { Format-Size $_.AdapterRAM }) -join ' + '
+    $boardText = (($board.Manufacturer, $board.Product) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) -join ' '
+
+    $systemSummary = @(
+        [pscustomobject]@{
+            Baslik = 'Anakart'
+            Ozet = if ($boardText) { $boardText } else { '-' }
+            Detay = if ($bios.SMBIOSBIOSVersion) { 'BIOS: ' + $bios.SMBIOSBIOSVersion } else { 'BIOS bilgisi okunamadı.' }
+        }
+        [pscustomobject]@{
+            Baslik = 'İşlemci'
+            Ozet = $cpuName
+            Detay = ('{0} çekirdek / {1} mantıksal işlemci | En yüksek frekans: {2} MHz' -f $cpuCores, $cpuThreads, @($cpu)[0].MaxClockSpeed)
+        }
+        [pscustomobject]@{
+            Baslik = 'Ekran kartı'
+            Ozet = if ($gpuNames) { $gpuNames } else { '-' }
+            Detay = if ($gpuMemory) { 'VRAM: ' + $gpuMemory } else { 'VRAM bilgisi okunamadı.' }
+        }
+        [pscustomobject]@{
+            Baslik = 'Disk'
+            Ozet = ('{0} disk | Toplam: {1}' -f @($disks).Count, (Format-Size $diskTotal))
+            Detay = if ($diskModels) { $diskModels } else { 'Disk modeli okunamadı.' }
+        }
+        [pscustomobject]@{
+            Baslik = 'RAM'
+            Ozet = ('{0} | {1} modül' -f (Format-Size $computer.TotalPhysicalMemory), $ramCount)
+            Detay = if ($ramSpeeds) { 'Hız: ' + $ramSpeeds } else { 'RAM hızı okunamadı.' }
+        }
+    )
 
     $overview = @(
         [pscustomobject]@{ Alan = 'Windows'; Bilgi = ($os.Caption + ' ' + $os.OSArchitecture) }
@@ -244,6 +326,7 @@ function New-SystemReport {
         @{Name = 'Kurulum tarihi'; Expression = { $_.InstalledOn }}
 
     $sections = @(
+        Convert-ToSummaryCards 'Sistem Özeti' $systemSummary 'Anakart, işlemci, ekran kartı, disk ve RAM ana bilgileri tek noktada özetlenir.'
         Convert-ToFragment 'Windows Özeti' $overview 'İşletim sistemi, zaman ve açılış bilgileri.'
         Convert-ToFragment 'Cihaz Özeti' $device 'Anakart, BIOS ve fiziksel sistem bilgileri.'
         Convert-ToFragment 'İşlemci' $processors ''
